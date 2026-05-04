@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#06060B">
   <link rel="manifest" href="manifest.webmanifest">
-  <title>Training Hub</title>
+  <title>FitPal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
@@ -1540,6 +1540,7 @@
       background: var(--b1);
       margin: 18px 0
     }
+
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -1556,6 +1557,7 @@
       padding: 10px 10px calc(10px + env(safe-area-inset-bottom, 20px));
       z-index: 1000;
     }
+
     .bn {
       display: flex;
       flex-direction: column;
@@ -1570,18 +1572,23 @@
       flex: 1;
       padding: 4px 0;
     }
-    .bn.on { color: var(--t1); }
+
+    .bn.on {
+      color: var(--t1);
+    }
+
     .bn-icon {
       font-size: 22px;
       margin-bottom: 2px;
       filter: grayscale(100%) opacity(0.5);
       transition: all 0.2s;
     }
+
     .bn.on .bn-icon {
       filter: grayscale(0%) opacity(1);
     }
 
-  
+
     .logger-wrap {
       background: var(--bg);
       border-radius: 8px;
@@ -1591,14 +1598,21 @@
       flex-direction: column;
       gap: 8px;
     }
+
     .logger-row {
       display: flex;
       align-items: center;
       gap: 8px;
     }
+
     .logger-num {
-      font-size: 13px; font-weight: 700; color: var(--t2); width: 20px; text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--t2);
+      width: 20px;
+      text-align: center;
     }
+
     .logger-input {
       flex: 1;
       background: var(--bg2);
@@ -1611,25 +1625,33 @@
       text-align: center;
       min-width: 0;
     }
+
     .logger-input:focus {
       border-color: var(--sky);
       outline: none;
     }
+
     .logger-btn {
-      width: 44px; height: 44px;
+      width: 44px;
+      height: 44px;
       border-radius: 8px;
       background: var(--card2);
       border: 1px solid var(--b2);
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 700; color: var(--t1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: var(--t1);
       cursor: pointer;
       flex-shrink: 0;
     }
+
     .logger-btn.done {
       background: var(--grn);
       color: #000;
       border-color: var(--grn);
     }
+
     .rest-timer {
       position: fixed;
       bottom: 80px;
@@ -1643,9 +1665,10 @@
       align-items: center;
       gap: 12px;
       z-index: 1200;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
       backdrop-filter: blur(10px);
     }
+
     .rest-timer.active {
       display: flex;
     }
@@ -1771,7 +1794,6 @@
         border-right: 1px solid var(--b1)
       }
     }
-
   </style>
 
   <div id="app">
@@ -1801,7 +1823,7 @@
           ⚖️ <span id="weightDisplay">102 kg</span>
         </button>
       </div>
-      <h1>Training Hub</h1>
+      <h1>FitPal</h1>
       <p class="hero-sub" id="heroSub">102 kg · 6 ft · 23 yr · Aggressive fat loss</p>
       <div class="stats-grid">
         <div class="stat">
@@ -1827,7 +1849,7 @@
       </div>
     </div>
 
-    
+
 
     <!-- WORKOUTS -->
     <div id="workouts" class="view active">
@@ -1853,9 +1875,29 @@
         </div>
       </div>
       <div class="mini-grid" id="streakStats"></div>
-      <div class="card" style="margin-bottom:16px">
-        <div style="font-weight:700;font-size:14px;margin-bottom:10px">Workout heatmap</div>
-        <div class="heatmap" id="workoutHeatmap"></div>
+      <div class="card" style="margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <div style="font-weight:700;font-size:14px">Workout heatmap</div>
+          <div style="font-size:11px;color:var(--t3)" id="heatmapMeta"></div>
+        </div>
+        <div style="display:flex; gap:24px; align-items:center; flex-wrap:wrap">
+          <div style="flex:1; overflow-x:auto; scrollbar-width:none">
+            <div id="workoutHeatmap"
+              style="display:grid;grid-template-rows:repeat(7,1fr);grid-auto-flow:column;grid-auto-columns:24px;gap:5px;min-width:max-content">
+            </div>
+            <div style="display:flex;align-items:center;justify-content:flex-start;gap:10px;margin-top:14px">
+              <span style="font-size:10px;color:var(--t3)">Off</span>
+              <div style="width:14px;height:14px;border-radius:4px;background:var(--bg3);border:.5px solid var(--b1)">
+              </div>
+              <span style="font-size:10px;color:var(--t3)">Done</span>
+              <div style="width:14px;height:14px;border-radius:4px;background:var(--grn)"></div>
+            </div>
+          </div>
+          <!-- Workout Stats -->
+          <div class="mini-grid"
+            style="margin-bottom:0; width:200px; display:grid; grid-template-columns:repeat(2,1fr); gap:10px"
+            id="workoutHeatmapStats"></div>
+        </div>
       </div>
 
       <p class="slbl">Tap a day to expand · hold edit to modify</p>
@@ -1932,96 +1974,170 @@
     </div>
 
     <!-- DIET -->
-        <div id="diet" class="view">
-      <div class="nav-scroll" style="margin-bottom:12px; border-bottom:1px solid var(--b2); padding-bottom:12px;" id="dietDaysNav">
-      </div>
+    <div id="diet" class="view">
       <div id="dietContent">
       </div>
+
+      <!-- Nutrition Intake Tracker -->
+      <div class="card" style="margin-top:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <div style="font-weight:700;font-size:14px">Intake history</div>
+          <div style="display:flex;gap:12px;font-size:10px;color:var(--t3)">
+            <span><span
+                style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--acc2);margin-right:3px"></span>Calories</span>
+            <span><span
+                style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--grn);margin-right:3px"></span>Protein</span>
+          </div>
+        </div>
+        <div id="nutritionChart" style="display:flex;align-items:flex-end;gap:4px;height:120px"></div>
+        <div id="nutritionLabels" style="display:flex;gap:4px;margin-top:4px"></div>
+      </div>
+
+      <!-- Nutrition Stats -->
+      <div class="mini-grid" style="margin-top:12px;margin-bottom:12px" id="nutritionSummary"></div>
     </div>
 
     <div id="supps" class="view">
       <div class="card" style="margin-bottom:12px">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
           <div style="font-weight:600;font-size:15px;color:var(--t1)">Daily Intake</div>
-          <div style="font-size:12px;color:var(--t2)" id="suppTakenCount">0/0</div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="font-size:12px;color:var(--t2)" id="suppTakenCount">0/0</div>
+            <button class="btn" style="padding:6px 14px;font-size:12px"
+              onclick="document.getElementById('suppModal').style.display='flex'">+ Add</button>
+          </div>
         </div>
         <div id="suppList"></div>
       </div>
 
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding:0 4px">
-        <div style="font-size:14px;font-weight:600;color:var(--t2)">My Stack</div>
-        <button class="btn" style="background:var(--card2);padding:6px 12px;font-size:12px" onclick="document.getElementById('suppModal').style.display='flex'">+ Add</button>
-      </div>
-      <div class="alert info">
-        <div class="alert-icon">i</div>
-        <div class="alert-content">
-          <div class="alert-title">Defaults included</div>
-          <div class="alert-body">Protein, creatine, and pre-workout are ready to track. Use the checkbox each day after taking them.</div>
+      <div class="card" style="margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <div style="font-weight:700;font-size:14px">Adherence tracker</div>
+          <div style="font-size:11px;color:var(--t3)" id="suppAdherenceRate">--</div>
+        </div>
+        <div style="display:flex; gap:24px; align-items:center; flex-wrap:wrap">
+          <div style="flex:1; overflow-x:auto; scrollbar-width:none">
+            <div id="suppHeatmap"
+              style="display:grid;grid-template-rows:repeat(7,1fr);grid-auto-flow:column;grid-auto-columns:24px;gap:5px;min-width:max-content">
+            </div>
+            <div style="display:flex;align-items:center;justify-content:flex-start;gap:10px;margin-top:14px">
+              <span style="font-size:10px;color:var(--t3)">Less</span>
+              <div style="width:14px;height:14px;border-radius:4px;background:var(--bg3);border:.5px solid var(--b1)">
+              </div>
+              <div style="width:14px;height:14px;border-radius:4px;background:rgba(45,212,160,0.2)"></div>
+              <div style="width:14px;height:14px;border-radius:4px;background:rgba(45,212,160,0.4)"></div>
+              <div style="width:14px;height:14px;border-radius:4px;background:rgba(45,212,160,0.7)"></div>
+              <div style="width:14px;height:14px;border-radius:4px;background:var(--grn)"></div>
+              <span style="font-size:10px;color:var(--t3)">More</span>
+            </div>
+          </div>
+          <!-- Supp Stats -->
+          <div class="mini-grid"
+            style="margin-bottom:0; width:200px; display:grid; grid-template-columns:repeat(2,1fr); gap:10px"
+            id="suppHeatmapStats"></div>
         </div>
       </div>
     </div>
 
     <div id="tracking" class="view">
-      <div class="card" style="margin-bottom:12px">
-        <div style="font-weight:600;font-size:15px;color:var(--t1);margin-bottom:12px">Weight Trend</div>
-        <div style="display:flex;gap:12px;margin-bottom:16px">
-          <div>
-            <div style="font-size:12px;color:var(--t2)">Current</div>
-            <div style="font-size:18px;font-weight:700" id="trackCurrentWeight">-- kg</div>
+      <!-- Weight Overview -->
+      <p class="slbl">Weight tracking</p>
+      <div style="display:flex;gap:10px;margin-bottom:12px">
+        <div class="card" style="flex:1;position:relative;overflow:hidden">
+          <div
+            style="font-size:10px;color:var(--t3);font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">
+            Current</div>
+          <div style="font-size:28px;font-weight:800;letter-spacing:-.5px;color:var(--t1)" id="trackCurrentWeight">-- kg
           </div>
-          <div>
-            <div style="font-size:12px;color:var(--t2)">Change</div>
-            <div style="font-size:18px;font-weight:700;color:var(--sky)" id="trackWeightChange">-- kg</div>
+          <div style="font-size:11px;color:var(--t3);margin-top:4px" id="trackWeightChange">No trend data yet</div>
+        </div>
+        <div class="card" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center">
+          <div
+            style="font-size:10px;color:var(--t3);font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">
+            Goal progress</div>
+          <div class="ring" id="ringWeight" style="--p:0;--c:var(--sky);width:80px;height:80px">
+            <div style="position:relative;text-align:center">
+              <div class="ring-val" style="font-size:16px" id="ringWeightVal">--</div>
+              <div class="ring-unit">kg goal</div>
+            </div>
           </div>
         </div>
-        <div id="weightChart" style="height:140px;background:var(--bg);border-radius:var(--r);position:relative;overflow:hidden"></div>
+      </div>
+
+      <!-- Weight Chart -->
+      <div class="card" style="margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div style="font-weight:700;font-size:14px">Weight trend</div>
+          <button class="edit-btn" style="flex:0;padding:6px 12px" onclick="editWeightGoal()">Set goal</button>
+        </div>
+        <div id="weightChart"
+          style="height:160px;background:var(--bg);border-radius:var(--r);position:relative;overflow:hidden"></div>
         <div style="display:flex;gap:8px;margin-top:12px">
-          <input type="number" id="newWeight" class="input" placeholder="Weight (kg)" style="flex:1" inputmode="decimal">
+          <input type="number" id="newWeight" class="input" placeholder="Weight (kg)" style="flex:1"
+            inputmode="decimal">
           <button class="btn" onclick="logWeight()">Log</button>
         </div>
       </div>
 
-      <div style="display:flex;gap:12px;margin-bottom:12px">
-        <div class="card" style="flex:1;display:flex;flex-direction:column;align-items:center">
-          <div style="font-size:13px;color:var(--t2);margin-bottom:8px">Weight Goal</div>
-          <div class="ring" id="ringWeight" style="--p:0;--c:var(--sky)">
-            <div style="position:relative;text-align:center">
-              <div class="ring-val" id="ringWeightVal">--</div>
-              <div class="ring-unit">kg</div>
-            </div>
+      <!-- Goal Distance -->
+      <div class="card" style="margin-bottom:12px;position:relative;overflow:hidden" id="goalDistanceCard">
+        <div
+          style="position:absolute;bottom:-20px;left:-20px;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(45,212,160,0.06),transparent 70%);pointer-events:none">
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div style="font-weight:700;font-size:14px">Goal distance</div>
+          <div style="font-size:11px;color:var(--t3)" id="goalEta"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:8px">
+          <div>
+            <div style="font-size:26px;font-weight:800;letter-spacing:-.5px;color:var(--t1)" id="goalRemaining">--</div>
+            <div style="font-size:11px;color:var(--t3)">kg to go</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:18px;font-weight:700;color:var(--grn)" id="goalPercent">0%</div>
+            <div style="font-size:11px;color:var(--t3)">complete</div>
           </div>
         </div>
-        <div class="card" style="flex:1;display:flex;flex-direction:column;align-items:center">
-          <div style="font-size:13px;color:var(--t2);margin-bottom:8px">Waist Goal</div>
-          <div class="ring" id="ringWaist" style="--p:0;--c:var(--grn)">
-            <div style="position:relative;text-align:center">
-              <div class="ring-val" id="ringWaistVal">--</div>
-              <div class="ring-unit">cm</div>
-            </div>
+        <div
+          style="position:relative;height:10px;background:var(--bg3);border-radius:5px;overflow:hidden;border:.5px solid var(--b1)">
+          <div id="goalProgressBar"
+            style="height:100%;border-radius:5px;background:linear-gradient(90deg,var(--sky),var(--grn));transition:width .6s ease;width:0%">
           </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:6px">
+          <div style="font-size:10px;color:var(--t3)" id="goalStart">Start: --</div>
+          <div style="font-size:10px;color:var(--grn);font-weight:600" id="goalTarget">Goal: --</div>
         </div>
       </div>
 
+      <!-- Weekly Weight Stats -->
+      <div class="mini-grid" style="margin-bottom:12px" id="weightAnalytics"></div>
+
+      <!-- Exercise PRs -->
+      <p class="slbl">Exercise PRs</p>
       <div class="card" style="margin-bottom:12px">
-        <div style="font-weight:600;font-size:15px;color:var(--t1);margin-bottom:12px">Body Measurements</div>
-        <div id="measurementsList"></div>
-        <div style="display:flex;gap:8px;margin-top:12px">
-          <input type="text" id="newMeasName" class="input" placeholder="e.g. Waist" style="flex:1">
-          <input type="number" id="newMeasVal" class="input" placeholder="Value" style="width:70px" inputmode="decimal">
-          <button class="btn" onclick="logMeasurement()">Log</button>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <div style="font-weight:700;font-size:14px">Personal Records</div>
+          <div style="font-size:12px;color:var(--t3)" id="prCount">0 exercises tracked</div>
         </div>
+        <div id="prList"></div>
       </div>
+
+      <!-- Today's Session Stats -->
       <div class="card" style="margin-bottom:12px">
-        <div style="font-weight:600;font-size:15px;color:var(--t1);margin-bottom:12px">Body Stat Rings</div>
-        <div class="mini-grid" id="bodyRings"></div>
-      </div>
-      <div class="card" style="margin-bottom:12px">
-        <div style="font-weight:600;font-size:15px;color:var(--t1);margin-bottom:12px">Training Progress</div>
+        <div style="font-weight:700;font-size:14px;margin-bottom:12px">Today's session</div>
         <div id="progressStats"></div>
+      </div>
+
+      <!-- Hidden elements for backward compat -->
+      <div id="measurementsList" style="display:none"></div>
+      <div id="bodyRings" style="display:none"></div>
+      <div id="ringWaist" style="display:none;--p:0">
+        <div class="ring-val" id="ringWaistVal">--</div>
       </div>
     </div>
 
-<div id="deload" class="view">
+    <div id="deload" class="view">
       <p class="slbl">Schedule every 6-8 weeks</p>
       <div class="alert info" style="margin-bottom:14px">
         <div class="alert-icon">i</div>
@@ -2076,21 +2192,25 @@
       </div>
     </div>
 
-  <!-- SUPP MODAL -->
-  <div id="suppModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:2000;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(8px)">
-    <div class="card" style="width:100%;max-width:400px">
-      <div style="font-size:16px;font-weight:600;margin-bottom:16px">Add Supplement</div>
-      <input type="text" id="suppNameInput" class="input" placeholder="Name (e.g. Creatine)" style="margin-bottom:12px">
-      <input type="text" id="suppDoseInput" class="input" placeholder="Dosage (e.g. 5g daily)" style="margin-bottom:12px">
-      <input type="text" id="suppWhyInput" class="input" placeholder="Purpose" style="margin-bottom:16px">
-      <div style="display:flex;gap:8px">
-        <button class="btn" style="flex:1;background:var(--card2)" onclick="document.getElementById('suppModal').style.display='none'">Cancel</button>
-        <button class="btn" style="flex:1" onclick="addSupp()">Save</button>
+    <!-- SUPP MODAL -->
+    <div id="suppModal"
+      style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:2000;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(8px)">
+      <div class="card" style="width:100%;max-width:400px">
+        <div style="font-size:16px;font-weight:600;margin-bottom:16px">Add Supplement</div>
+        <input type="text" id="suppNameInput" class="input" placeholder="Name (e.g. Creatine)"
+          style="margin-bottom:12px">
+        <input type="text" id="suppDoseInput" class="input" placeholder="Dosage (e.g. 5g daily)"
+          style="margin-bottom:12px">
+        <input type="text" id="suppWhyInput" class="input" placeholder="Purpose" style="margin-bottom:16px">
+        <div style="display:flex;gap:8px">
+          <button class="btn" style="flex:1;background:var(--card2)"
+            onclick="document.getElementById('suppModal').style.display='none'">Cancel</button>
+          <button class="btn" style="flex:1" onclick="addSupp()">Save</button>
+        </div>
       </div>
     </div>
-  </div>
 
-<!-- MORE VIEW (Created for extra tabs) -->
+    <!-- MORE VIEW (Created for extra tabs) -->
     <div id="more" class="view">
       <p class="slbl">More</p>
       <div class="card" style="margin-bottom:12px" onclick="nav('mobility', document.getElementById('bn-more'))">
@@ -2114,11 +2234,12 @@
       </div>
     </div>
 
-        <!-- MOBILITY VIEW -->
+    <!-- MOBILITY VIEW -->
     <div id="mobility" class="view">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
         <p class="slbl" style="margin:0">Routines</p>
-        <button class="btn" style="background:var(--card2);padding:6px 12px;font-size:12px" onclick="document.getElementById('mobModal').style.display='flex'">+ Add</button>
+        <button class="btn" style="background:var(--card2);padding:6px 12px;font-size:12px"
+          onclick="document.getElementById('mobModal').style.display='flex'">+ Add</button>
       </div>
       <div id="mobilityList"></div>
     </div>
@@ -2147,48 +2268,52 @@
       </button>
     </div>
 
-  
-  <!-- MOBILITY MODAL -->
-  <div id="mobModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:2000;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(8px)">
-    <div class="card" style="width:100%;max-width:400px">
-      <div style="font-size:16px;font-weight:600;margin-bottom:16px">Add Mobility Routine</div>
-      <input type="text" id="mobNameInput" class="input" placeholder="Routine Name (e.g. Morning Flow)" style="margin-bottom:12px">
-      <input type="text" id="mobNoteInput" class="input" placeholder="Notes/Duration" style="margin-bottom:16px">
-      <div style="display:flex;gap:8px">
-        <button class="btn" style="flex:1;background:var(--card2)" onclick="document.getElementById('mobModal').style.display='none'">Cancel</button>
-        <button class="btn" style="flex:1" onclick="addMob()">Save</button>
-      </div>
-    </div>
-  </div>
 
-  <div class="workout-mode" id="workoutMode">
-    <div class="wm-head">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
-        <div>
-          <div class="wm-title" id="wmDayTitle">Workout</div>
-          <div class="wm-sub" id="wmTimer">Timer ready</div>
+    <!-- MOBILITY MODAL -->
+    <div id="mobModal"
+      style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:2000;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(8px)">
+      <div class="card" style="width:100%;max-width:400px">
+        <div style="font-size:16px;font-weight:600;margin-bottom:16px">Add Mobility Routine</div>
+        <input type="text" id="mobNameInput" class="input" placeholder="Routine Name (e.g. Morning Flow)"
+          style="margin-bottom:12px">
+        <input type="text" id="mobNoteInput" class="input" placeholder="Notes/Duration" style="margin-bottom:16px">
+        <div style="display:flex;gap:8px">
+          <button class="btn" style="flex:1;background:var(--card2)"
+            onclick="document.getElementById('mobModal').style.display='none'">Cancel</button>
+          <button class="btn" style="flex:1" onclick="addMob()">Save</button>
         </div>
-        <button class="btn" style="background:var(--card2);width:54px" onclick="closeWorkoutMode()">Close</button>
       </div>
     </div>
-    <div class="wm-body">
-      <div class="card" style="margin-bottom:12px">
-        <div class="wm-sub" id="wmCount">Exercise 1/1</div>
-        <div style="font-size:26px;font-weight:800;margin:6px 0" id="wmExerciseName">Exercise</div>
-        <div style="color:var(--t2);font-size:13px" id="wmExerciseDetail"></div>
-        <div class="logger-meta" id="wmComparison"></div>
+
+    <div class="workout-mode" id="workoutMode">
+      <div class="wm-head">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+          <div>
+            <div class="wm-title" id="wmDayTitle">Workout</div>
+            <div class="wm-sub" id="wmTimer">Timer ready</div>
+          </div>
+          <button class="btn" style="background:var(--card2);width:54px" onclick="closeWorkoutMode()">Close</button>
+        </div>
       </div>
-      <div id="wmSets"></div>
-    </div>
-    <div class="wm-foot">
-      <div class="action-row" style="margin-bottom:0">
-        <button class="btn" style="background:var(--card2)" onclick="prevWorkoutExercise()">Prev</button>
-        <button class="btn" onclick="quickCompleteCurrentSet()">Complete Set</button>
-        <button class="btn" style="background:var(--card2)" onclick="nextWorkoutExercise()">Next</button>
+      <div class="wm-body">
+        <div class="card" style="margin-bottom:12px">
+          <div class="wm-sub" id="wmCount">Exercise 1/1</div>
+          <div style="font-size:26px;font-weight:800;margin:6px 0" id="wmExerciseName">Exercise</div>
+          <div style="color:var(--t2);font-size:13px" id="wmExerciseDetail"></div>
+          <div class="logger-meta" id="wmComparison"></div>
+        </div>
+        <div id="wmSets"></div>
       </div>
-      <button class="btn" style="width:100%;margin-top:8px;background:var(--grn);color:#04110c" onclick="finishWorkoutMode()">Finish Workout</button>
+      <div class="wm-foot">
+        <div class="action-row" style="margin-bottom:0">
+          <button class="btn" style="background:var(--card2)" onclick="prevWorkoutExercise()">Prev</button>
+          <button class="btn" onclick="quickCompleteCurrentSet()">Complete Set</button>
+          <button class="btn" style="background:var(--card2)" onclick="nextWorkoutExercise()">Next</button>
+        </div>
+        <button class="btn" style="width:100%;margin-top:8px;background:var(--grn);color:#04110c"
+          onclick="finishWorkoutMode()">Finish Workout</button>
+      </div>
     </div>
-  </div>
 
   </div>
 
@@ -2338,7 +2463,7 @@
     /** Consecutive workout days (Mon-Sat) walking backward by calendar date; Sundays are neutral gaps. Uses done calendar keys only. */
     function countBackwardCalendarStreak(doneDates) {
       let streak = 0;
-      for (let i = 0; i < 140; i++) {
+      for (let i = 0; i < 60; i++) {
         const probe = new Date();
         probe.setHours(12, 0, 0, 0);
         probe.setDate(probe.getDate() - i);
@@ -2412,9 +2537,9 @@
       const color = day.type === 'push' ? 'var(--acc2)' : day.type === 'pull' ? 'var(--sky)' : day.type === 'legs' ? 'var(--ora)' : 'var(--t3)';
       const glyph = label === 'CHEST' ? 'M8 17 C8 10 11 7 16 7 C21 7 24 10 24 17 M24 17 C24 10 27 7 32 7 C37 7 40 10 40 17' :
         label === 'BACK' ? 'M16 9 C13 15 13 25 16 33 M32 9 C35 15 35 25 32 33 M19 14 H29 M18 22 H30' :
-        label === 'QUAD' ? 'M18 7 C23 13 24 24 19 36 M30 7 C25 15 25 27 31 36' :
-        label === 'HAM' ? 'M17 7 C24 13 24 25 18 36 M31 7 C28 15 29 27 35 36' :
-        'M14 24 H34 M24 14 V34';
+          label === 'QUAD' ? 'M18 7 C23 13 24 24 19 36 M30 7 C25 15 25 27 31 36' :
+            label === 'HAM' ? 'M17 7 C24 13 24 25 18 36 M31 7 C28 15 29 27 35 36' :
+              'M14 24 H34 M24 14 V34';
       return `<svg class="icon-glyph" viewBox="0 0 48 48" fill="none" aria-hidden="true">
         <path d="${glyph}" stroke="${color}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>`;
@@ -2450,7 +2575,7 @@
       return DAYS[idx] || DAYS[0];
     }
 
-        // ── EXERCISE LIBRARY ──
+    // ── EXERCISE LIBRARY ──
     const EX_DB = [
       { name: 'Flat Barbell Bench Press', muscle: 'chest', equipment: 'barbell', movement: 'horizontal press', tags: ['chest', 'barbell', 'compound'] },
       { name: 'Incline Dumbbell Press', muscle: 'chest', equipment: 'dumbbell', movement: 'incline press', tags: ['upper chest', 'dumbbell', 'compound'] },
@@ -2473,45 +2598,45 @@
       { name: 'Cable Crunches', muscle: 'core', equipment: 'cable', movement: 'flexion', tags: ['abs', 'cable', 'isolation'] },
       { name: 'Hanging Leg Raises', muscle: 'core', equipment: 'bodyweight', movement: 'hip flexion', tags: ['abs', 'bodyweight'] },
     ];
-    
+
     let activeDayForLib = null;
     let currentLibFilter = 'all';
-    
+
     function openLibrary(dayId) {
       activeDayForLib = dayId;
       document.getElementById('libModal').style.display = 'flex';
       setLibFilter('all');
     }
-    
+
     function closeLibrary() {
       document.getElementById('libModal').style.display = 'none';
       activeDayForLib = null;
     }
-    
+
     function setLibFilter(f) {
       currentLibFilter = f;
-      const btns = ['all','chest','back','legs','shoulders','arms','core'];
+      const btns = ['all', 'chest', 'back', 'legs', 'shoulders', 'arms', 'core'];
       btns.forEach(b => {
         const el = document.getElementById('libFilter_' + b);
-        if(el) {
-          if(b === f) el.classList.add('active');
+        if (el) {
+          if (b === f) el.classList.add('active');
           else el.classList.remove('active');
         }
       });
       filterLibrary();
     }
-    
+
     function filterLibrary() {
       const q = document.getElementById('libSearch').value.toLowerCase();
       const list = document.getElementById('libList');
       list.innerHTML = '';
-      
+
       const filtered = EX_DB.filter(ex => {
-        if(currentLibFilter !== 'all' && ex.muscle !== currentLibFilter) return false;
-        if(q && !ex.name.toLowerCase().includes(q)) return false;
+        if (currentLibFilter !== 'all' && ex.muscle !== currentLibFilter) return false;
+        if (q && !ex.name.toLowerCase().includes(q)) return false;
         return true;
       });
-      
+
       filtered.forEach(ex => {
         const t = [ex.muscle, ex.equipment, ex.movement, ...ex.tags].filter(Boolean)
           .filter((tag, idx, arr) => arr.indexOf(tag) === idx)
@@ -2523,10 +2648,10 @@
         </div>`;
       });
     }
-    
+
     function selectLibExercise(name) {
-      if(!activeDayForLib) return;
-      if(!exercises[activeDayForLib]) exercises[activeDayForLib] = [];
+      if (!activeDayForLib) return;
+      if (!exercises[activeDayForLib]) exercises[activeDayForLib] = [];
       const meta = EX_DB.find(ex => ex.name === name);
       exercises[activeDayForLib].push({
         name,
@@ -2538,10 +2663,10 @@
       buildDayCards(); // refresh
       closeLibrary();
     }
-    
+
     function addCustomExercise() {
       const name = document.getElementById('libCustomInput').value.trim();
-      if(name) {
+      if (name) {
         selectLibExercise(name);
         document.getElementById('libCustomInput').value = '';
       }
@@ -2550,13 +2675,13 @@
     // ── WORKOUT LOGGER ──
     const SK_LOGS = 'ft_workout_logs_v1';
     let workoutLogs = JSON.parse(localStorage.getItem(SK_LOGS)) || {};
-    
+
     function saveLogs() {
       localStorage.setItem(SK_LOGS, JSON.stringify(workoutLogs));
     }
-    
+
     function getTodayKey() { return localDateKey(); }
-    
+
     function toggleLogger(dayId, exIdx) {
       const wrap = document.getElementById(`logger_${dayId}_${exIdx}`);
       if (wrap.style.display === 'flex') {
@@ -2566,12 +2691,12 @@
       wrap.style.display = 'flex';
       renderLogger(dayId, exIdx);
     }
-    
+
     function renderLogger(dayId, exIdx) {
       const wrap = document.getElementById(`logger_${dayId}_${exIdx}`);
       const ex = exercises[dayId][exIdx];
       const today = getTodayKey();
-      
+
       if (!workoutLogs[today]) workoutLogs[today] = {};
       if (!workoutLogs[today][ex.name]) {
         // Default to 3 sets
@@ -2581,12 +2706,12 @@
           { w: '', r: '', rpe: '', done: false, drop: false }
         ];
       }
-      
+
       const sets = workoutLogs[today][ex.name];
       const last = getPreviousSet(ex.name, 0);
       const target = parseTargetReps(ex.detail);
       const suggestion = suggestNextWeight(ex.name, target);
-      
+
       let html = `<div class="logger-meta">
         <div class="logger-chip">Last: ${last && last.w && last.r ? `${last.w}kg × ${last.r}` : 'none'}</div>
         <div class="logger-chip">Next: ${suggestion ? `${suggestion}kg` : 'log first'}</div>
@@ -2598,7 +2723,7 @@
         <div style="font-size:12px;color:var(--t2);width:72px;text-align:center">RPE</div>
         <div style="font-size:12px;color:var(--t2);width:44px;text-align:center">✓</div>
       </div>`;
-      
+
       sets.forEach((s, sIdx) => {
         html += `
         <div class="logger-row" ontouchstart="touchStart(event)" ontouchend="touchSetEnd(event,'${dayId}',${exIdx},${sIdx})">
@@ -2613,24 +2738,24 @@
           <button class="edit-btn" style="padding:7px" onclick="event.stopPropagation(); duplicateSet('${dayId}',${exIdx},'${escapeJsAttr(ex.name)}',${sIdx})">Copy</button>
         </div>`;
       });
-      
+
       html += `
       <textarea class="input" style="min-height:70px;margin:8px 0" placeholder="Exercise notes" onchange="saveExerciseNote('${dayId}',${exIdx},this.value)">${escapeHTML(ex.notes || '')}</textarea>
       <div style="display:flex;justify-content:center;margin-top:4px;gap:8px">
         <button class="btn" style="background:transparent;border:1px dashed var(--b2);color:var(--t2);padding:6px 16px;font-size:13px" onclick="addSet('${dayId}', ${exIdx}, '${escapeJsAttr(ex.name)}')">+ Add Set</button>
         <button class="btn" style="padding:6px 16px;font-size:13px" onclick="toggleSetDone('${dayId}',${exIdx},'${escapeJsAttr(ex.name)}',0,this)">Quick Complete</button>
       </div>`;
-      
+
       wrap.innerHTML = html;
     }
-    
+
     function updateSet(exName, sIdx, field, val) {
       const today = getTodayKey();
       workoutLogs[today][exName][sIdx][field] = val;
       saveLogs();
       renderWorkoutInsights();
     }
-    
+
     function getPreviousSet(exName, sIdx) {
       const dates = Object.keys(workoutLogs).sort().reverse();
       const today = getTodayKey();
@@ -2725,12 +2850,12 @@
       }
       return rows;
     }
-    
+
     function toggleSetDone(dayId, exIdx, exName, sIdx, btnEl) {
       const today = getTodayKey();
       const rows = ensureWorkoutLogRows(today, exName, sIdx);
       const s = rows[sIdx];
-      
+
       // Zero-typing auto-fill if empty
       if (!s.done && (!s.w || !s.r)) {
         if (sIdx > 0) {
@@ -2746,19 +2871,19 @@
           }
         }
       }
-      
+
       s.done = !s.done;
       saveLogs();
       renderLogger(dayId, exIdx);
       renderWorkoutInsights();
       if (document.getElementById('workoutMode')?.classList.contains('open')) renderWorkoutMode();
-      
+
       if (s.done) {
         vibrate(50);
         startRestTimer(60); // Default 60s rest
       }
     }
-    
+
     function addSet(dayId, exIdx, exName) {
       const today = getTodayKey();
       const rows = ensureWorkoutLogRows(today, exName, 0);
@@ -2771,18 +2896,18 @@
         if (inputs.length) inputs[inputs.length - 2].focus();
       }, 50);
     }
-    
+
     // ── REST TIMER ──
     let restInterval;
     let restTime = 0;
-    
+
     function startRestTimer(seconds) {
       clearInterval(restInterval);
       restTime = seconds;
       const tWrap = document.getElementById('restTimer');
       const tVal = document.getElementById('restTimerVal');
       tWrap.classList.add('active');
-      
+
       function update() {
         if (restTime <= 0) {
           clearInterval(restInterval);
@@ -2798,7 +2923,7 @@
       update();
       restInterval = setInterval(update, 1000);
     }
-    
+
     function closeRestTimer() {
       clearInterval(restInterval);
       document.getElementById('restTimer').classList.remove('active');
@@ -3023,13 +3148,51 @@
       if (!el) return;
       const done = getDoneWorkoutDates();
       let html = '';
-      for (let i = 27; i >= 0; i--) {
+      let activeDays = 0, totalDays = 0;
+      const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      // Show exactly 45 days history with even larger boxes
+      for (let i = 44; i >= 0; i--) {
         const d = new Date();
         d.setDate(d.getDate() - i);
         const key = localDateKey(d);
-        html += `<div class="heat-cell ${done.has(key) ? 'on' : ''} ${d.getDay() === 0 ? 'rest' : ''}" title="${key}"></div>`;
+        const isRest = d.getDay() === 0;
+        const isDone = done.has(key);
+        totalDays++;
+        if (isDone) activeDays++;
+        let bg = 'var(--bg3)', border = '.5px solid var(--b1)', opacity = '1';
+        if (isRest) { opacity = '0.3'; }
+        else if (isDone) { bg = 'var(--grn)'; border = 'none'; }
+        html += `<div style="width:24px;height:24px;border-radius:4px;background:${bg};border:${border};opacity:${opacity}" title="${dayNames[d.getDay()]} ${key}${isDone ? ' ✓' : ''}"></div>`;
       }
       el.innerHTML = html;
+      const metaEl = document.getElementById('heatmapMeta');
+      if (metaEl) metaEl.textContent = `${activeDays} workouts (45 days)`;
+
+      // Workout stats below heatmap
+      const statsEl = document.getElementById('workoutHeatmapStats');
+      if (statsEl) {
+        const consistency = Math.round((activeDays / 78) * 100); // 78 non-rest days in 91
+        let streak = 0;
+        for (let i = 0; i <= 90; i++) {
+          const d = new Date(); d.setDate(d.getDate() - i);
+          if (d.getDay() === 0) continue;
+          if (done.has(localDateKey(d))) streak++; else break;
+        }
+        // Weekly frequency
+        const weeks13 = 13;
+        const freq = (activeDays / weeks13).toFixed(1);
+        // Days since last workout
+        let daysSince = '--';
+        for (let i = 0; i <= 90; i++) {
+          const d = new Date(); d.setDate(d.getDate() - i);
+          if (done.has(localDateKey(d))) { daysSince = i === 0 ? 'Today' : i === 1 ? 'Yesterday' : `${i}d ago`; break; }
+        }
+        statsEl.innerHTML = `
+          <div style="background:var(--bg3);border-radius:10px;padding:12px 4px;text-align:center;border:.5px solid var(--b1)"><div class="m-val" style="font-size:18px;color:var(--grn)">${streak}</div><div class="m-lbl" style="font-size:10px">streak</div></div>
+          <div style="background:var(--bg3);border-radius:10px;padding:12px 4px;text-align:center;border:.5px solid var(--b1)"><div class="m-val" style="font-size:18px;color:var(--sky)">${consistency}%</div><div class="m-lbl" style="font-size:10px">consistency</div></div>
+          <div style="background:var(--bg3);border-radius:10px;padding:12px 4px;text-align:center;border:.5px solid var(--b1)"><div class="m-val" style="font-size:18px;color:var(--amb)">${freq}x</div><div class="m-lbl" style="font-size:10px">per week</div></div>
+          <div style="background:var(--bg3);border-radius:10px;padding:12px 4px;text-align:center;border:.5px solid var(--b1)"><div class="m-val" style="font-size:18px;color:var(--acc2)">${daysSince}</div><div class="m-lbl" style="font-size:10px">last workout</div></div>`;
+      }
     }
 
     function renderTodaySuggestion() {
@@ -3271,10 +3434,17 @@
       const container = document.getElementById('weightChart');
       if (!container) return;
       const hist = JSON.parse(localStorage.getItem('ft_weight_history') || '[]');
-      if (hist.length < 2) {
-        container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--t3);font-size:13px">Log weight a few times to see your trend</div>';
+      if (hist.length === 0) {
+        container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--t3);font-size:13px">Log your weight to start tracking</div>';
         document.getElementById('trackCurrentWeight').textContent = currentWeight + ' kg';
-        document.getElementById('trackWeightChange').textContent = 'No trend data yet';
+        document.getElementById('trackWeightChange').textContent = 'No entries yet';
+        return;
+      }
+      if (hist.length === 1) {
+        const v = hist[0].value;
+        container.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:4px"><div style="width:12px;height:12px;border-radius:50%;background:var(--acc2);box-shadow:0 0 12px rgba(123,111,255,.4)"></div><div style="font-size:14px;font-weight:700;color:var(--t1)">${v} kg</div><div style="color:var(--t3);font-size:11px;text-align:center">Log weight on another day<br>to start seeing your trend</div></div>`;
+        document.getElementById('trackCurrentWeight').textContent = v + ' kg';
+        document.getElementById('trackWeightChange').textContent = '1 day logged · need 2+ days for trend';
         return;
       }
       const sorted = hist.sort((a, b) => a.date.localeCompare(b.date)).slice(-12);
@@ -3369,23 +3539,202 @@
       const today = getWorkoutSummary(getTodayKey());
       const load = getWeeklyLoad();
       const loadLabel = load < 8000 ? 'Low' : load < 25000 ? 'Optimal' : 'High';
-      const prs = Object.entries(getExercisePRs()).sort((a, b) => b[1].w - a[1].w).slice(0, 5);
       el.innerHTML = `
         <div class="mini-grid">
-          <div class="card"><div class="m-val" style="font-size:22px;color:var(--grn)">${today.volume.toFixed(0)}</div><div class="m-lbl">today volume</div></div>
+          <div class="card"><div class="m-val" style="font-size:22px;color:var(--grn)">${today.volume.toFixed(0)}</div><div class="m-lbl">volume (kg)</div></div>
           <div class="card"><div class="m-val" style="font-size:22px;color:var(--sky)">${today.sets}</div><div class="m-lbl">sets done</div></div>
           <div class="card"><div class="m-val" style="font-size:22px;color:var(--amb)">${loadLabel}</div><div class="m-lbl">weekly load</div></div>
           <div class="card"><div class="m-val" style="font-size:22px;color:var(--acc2)">${today.muscles.length || '-'}</div><div class="m-lbl">muscles hit</div></div>
-        </div>
-        <div style="font-size:13px;color:var(--t2);line-height:1.7">
-          ${prs.length ? prs.map(([name, pr]) => `${escapeHTML(name)}: ${pr.w}kg × ${pr.r}`).join('<br>') : 'Log workouts to see exercise PRs.'}
         </div>`;
+    }
+
+    function renderPRList() {
+      const el = document.getElementById('prList');
+      if (!el) return;
+      const prs = Object.entries(getExercisePRs()).sort((a, b) => b[1].w - a[1].w);
+      const countEl = document.getElementById('prCount');
+      if (countEl) countEl.textContent = `${prs.length} exercises tracked`;
+      if (!prs.length) {
+        el.innerHTML = '<div style="color:var(--t3);font-size:13px;padding:8px 0">Log workouts to see exercise PRs here.</div>';
+        return;
+      }
+      el.innerHTML = prs.map(([name, pr], i) => {
+        const meta = EX_DB.find(ex => ex.name === name);
+        const muscle = meta ? meta.muscle : '';
+        const colorMap = { chest: 'var(--acc2)', back: 'var(--sky)', legs: 'var(--ora)', shoulders: 'var(--amb)', arms: 'var(--grn)', core: 'var(--red)' };
+        const color = colorMap[muscle] || 'var(--t2)';
+        const history = getExerciseHistory(name);
+        const trend = history.length >= 2 ? (history[history.length - 1].w >= history[history.length - 2].w ? '↑' : '↓') : '';
+        const trendColor = trend === '↑' ? 'var(--grn)' : trend === '↓' ? 'var(--red)' : 'var(--t3)';
+        return `<div style="display:flex;align-items:center;gap:12px;padding:10px 0;${i < prs.length - 1 ? 'border-bottom:.5px solid var(--b1)' : ''}">
+          <div style="width:32px;height:32px;border-radius:9px;background:${color}22;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:${color};flex-shrink:0">${i + 1}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHTML(name)}</div>
+            <div style="font-size:11px;color:var(--t3)">${muscle || 'exercise'} · ${history.length} sessions</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:15px;font-weight:800;color:${color}">${pr.w}kg</div>
+            <div style="font-size:10px;color:var(--t3)">× ${pr.r} reps <span style="color:${trendColor}">${trend}</span></div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function getExerciseHistory(exName) {
+      const history = [];
+      const dates = Object.keys(workoutLogs || {}).sort();
+      dates.forEach(date => {
+        const sets = workoutLogs[date]?.[exName];
+        if (!sets) return;
+        const best = sets.filter(s => s.done && s.w && s.r).sort((a, b) => parseFloat(b.w) - parseFloat(a.w))[0];
+        if (best) history.push({ date, w: parseFloat(best.w), r: parseFloat(best.r) });
+      });
+      return history;
+    }
+
+    function renderWeightAnalytics() {
+      const el = document.getElementById('weightAnalytics');
+      if (!el) return;
+      const hist = JSON.parse(localStorage.getItem('ft_weight_history') || '[]').sort((a, b) => a.date.localeCompare(b.date));
+      const goals = getBodyGoals();
+      const goal = goals.Weight ? goals.Weight.goal : 85;
+      const start = goals.Weight ? goals.Weight.start : 102;
+      const remaining = Math.max(0, currentWeight - goal);
+      const lost = Math.max(0, start - currentWeight);
+      const weeklyRate = hist.length >= 2 ? ((hist[hist.length - 1].value - hist[Math.max(0, hist.length - 4)].value) / Math.min(hist.length - 1, 3)).toFixed(1) : '--';
+      el.innerHTML = `
+        <div class="card"><div class="m-val" style="font-size:20px;color:var(--sky)">${goal}</div><div class="m-lbl">target (kg)</div></div>
+        <div class="card"><div class="m-val" style="font-size:20px;color:var(--grn)">${lost.toFixed(1)}</div><div class="m-lbl">lost (kg)</div></div>
+        <div class="card"><div class="m-val" style="font-size:20px;color:var(--amb)">${remaining.toFixed(1)}</div><div class="m-lbl">remaining (kg)</div></div>
+        <div class="card"><div class="m-val" style="font-size:20px;color:var(--acc2)">${weeklyRate}</div><div class="m-lbl">avg/week (kg)</div></div>`;
+    }
+
+    function renderGoalDistance() {
+      const goals = getBodyGoals();
+      const cfg = goals.Weight || { start: 102, goal: 85 };
+      const start = cfg.start;
+      const goal = cfg.goal;
+      const totalDelta = Math.abs(start - goal) || 1;
+      const progress = Math.abs(start - currentWeight);
+      const remaining = Math.max(0, Math.abs(currentWeight - goal));
+      const pct = Math.min(100, Math.round((progress / totalDelta) * 100));
+      const hist = JSON.parse(localStorage.getItem('ft_weight_history') || '[]');
+      // ETA calculation
+      let eta = '';
+      if (hist.length >= 2 && remaining > 0) {
+        const sorted = hist.sort((a, b) => (a.ts || 0) - (b.ts || 0));
+        const first = sorted[0], last = sorted[sorted.length - 1];
+        const daySpan = Math.max(1, (new Date(last.date) - new Date(first.date)) / 86400000) || 1;
+        const ratePerDay = Math.abs(first.value - last.value) / daySpan;
+        if (ratePerDay > 0) {
+          const daysLeft = Math.round(remaining / ratePerDay);
+          eta = daysLeft > 60 ? `~${Math.round(daysLeft / 30)} months to go` : `~${daysLeft} days to go`;
+        }
+      }
+      const el = (id) => document.getElementById(id);
+      if (el('goalRemaining')) el('goalRemaining').textContent = remaining.toFixed(1);
+      if (el('goalPercent')) el('goalPercent').textContent = pct + '%';
+      if (el('goalProgressBar')) el('goalProgressBar').style.width = pct + '%';
+      if (el('goalStart')) el('goalStart').textContent = `Start: ${start} kg`;
+      if (el('goalTarget')) el('goalTarget').textContent = `Goal: ${goal} kg`;
+      if (el('goalEta')) el('goalEta').textContent = eta;
+    }
+
+    function editWeightGoal() {
+      const goals = getBodyGoals();
+      const cfg = goals.Weight || { unit: 'kg', start: 102, goal: 85, color: 'var(--sky)' };
+      const goal = parseFloat(prompt('Target weight (kg)', cfg.goal));
+      if (isNaN(goal)) return;
+      const start = parseFloat(prompt('Starting weight (kg)', cfg.start));
+      if (isNaN(start)) return;
+      cfg.goal = goal;
+      cfg.start = start;
+      goals.Weight = cfg;
+      saveBodyGoals(goals);
+      updateBodyRings();
+      renderWeightAnalytics();
+      renderGoalDistance();
+    }
+
+    function renderSuppHeatmap() {
+      const el = document.getElementById('suppHeatmap');
+      const rateEl = document.getElementById('suppAdherenceRate');
+      if (!el) return;
+      const log = getSuppLog();
+      const supps = loadSupps();
+      const totalSupps = supps.length || 1;
+      let html = '';
+      let adherentDays = 0, totalDays = 0;
+      // Show exactly 45 days history with even larger boxes
+      for (let i = 44; i >= 0; i--) {
+        const d = new Date(); d.setDate(d.getDate() - i);
+        const key = localDateKey(d);
+        const dayLog = log[key] || {};
+        const taken = supps.filter(s => dayLog[s.id]).length;
+        const ratio = taken / totalSupps;
+        totalDays++;
+        if (ratio >= 0.5) adherentDays++;
+        let bg = 'var(--bg3)', border = '.5px solid var(--b1)';
+        if (ratio > 0 && ratio < 0.25) { bg = 'rgba(45,212,160,0.15)'; border = 'none'; }
+        else if (ratio >= 0.25 && ratio < 0.5) { bg = 'rgba(45,212,160,0.35)'; border = 'none'; }
+        else if (ratio >= 0.5 && ratio < 0.75) { bg = 'rgba(45,212,160,0.55)'; border = 'none'; }
+        else if (ratio >= 0.75) { bg = 'var(--grn)'; border = 'none'; }
+        const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        html += `<div style="width:24px;height:24px;border-radius:4px;background:${bg};border:${border}" title="${dayNames[d.getDay()]} ${key}: ${taken}/${totalSupps}"></div>`;
+      }
+      el.innerHTML = html;
+      if (rateEl) rateEl.textContent = `${Math.round((adherentDays / totalDays) * 100)}% adherence (45 days)`;
+
+      // Supp stats below heatmap
+      const statsEl = document.getElementById('suppHeatmapStats');
+      if (statsEl) {
+        // Current streak
+        let streak = 0;
+        for (let i = 0; i <= 90; i++) {
+          const d = new Date(); d.setDate(d.getDate() - i);
+          const key = localDateKey(d);
+          const dayLog = log[key] || {};
+          const taken = supps.filter(s => dayLog[s.id]).length;
+          if (taken / totalSupps >= 0.5) streak++; else if (i > 0) break;
+        }
+        // Best streak
+        let best = 0, curr = 0;
+        for (let i = 90; i >= 0; i--) {
+          const d = new Date(); d.setDate(d.getDate() - i);
+          const key = localDateKey(d);
+          const dayLog = log[key] || {};
+          const taken = supps.filter(s => dayLog[s.id]).length;
+          if (taken / totalSupps >= 0.5) { curr++; best = Math.max(best, curr); } else { curr = 0; }
+        }
+        // Today progress
+        const todayLog = log[localDateKey()] || {};
+        const todayTaken = supps.filter(s => todayLog[s.id]).length;
+        // Weekly avg
+        let last7 = 0;
+        for (let i = 0; i < 7; i++) {
+          const d = new Date(); d.setDate(d.getDate() - i);
+          const key = localDateKey(d);
+          const dayLog = log[key] || {};
+          const taken = supps.filter(s => dayLog[s.id]).length;
+          last7 += taken / totalSupps;
+        }
+        const weeklyAvg = Math.round((last7 / 7) * 100);
+        statsEl.innerHTML = `
+          <div style="background:var(--bg3);border-radius:10px;padding:12px 4px;text-align:center;border:.5px solid var(--b1)"><div class="m-val" style="font-size:18px;color:var(--grn)">${streak}</div><div class="m-lbl" style="font-size:10px">streak</div></div>
+          <div style="background:var(--bg3);border-radius:10px;padding:12px 4px;text-align:center;border:.5px solid var(--b1)"><div class="m-val" style="font-size:18px;color:var(--sky)">${best}</div><div class="m-lbl" style="font-size:10px">best streak</div></div>
+          <div style="background:var(--bg3);border-radius:10px;padding:12px 4px;text-align:center;border:.5px solid var(--b1)"><div class="m-val" style="font-size:18px;color:var(--amb)">${weeklyAvg}%</div><div class="m-lbl" style="font-size:10px">weekly avg</div></div>
+          <div style="background:var(--bg3);border-radius:10px;padding:12px 4px;text-align:center;border:.5px solid var(--b1)"><div class="m-val" style="font-size:18px;color:var(--acc2)">${todayTaken}/${totalSupps}</div><div class="m-lbl" style="font-size:10px">today</div></div>`;
+      }
     }
 
     function renderWorkoutInsights() {
       renderProgressStats();
+      renderPRList();
+      renderWeightAnalytics();
+      renderGoalDistance();
       renderWorkoutHeatmap();
       renderTodaySuggestion();
+      renderSuppHeatmap();
     }
 
     // ── BODY STAT RINGS ──
@@ -3505,15 +3854,14 @@
       if (isNaN(val) || val < 40 || val > 250) return;
       currentWeight = val;
       saveWeightStore();
-      const today = localDateKey();
       const hist = JSON.parse(localStorage.getItem('ft_weight_history') || '[]');
-      const existing = hist.findIndex(h => h.date === today);
-      if (existing >= 0) hist[existing].value = val;
-      else hist.push({ date: today, value: val });
+      hist.push({ date: localDateKey(), value: val, ts: Date.now() });
       localStorage.setItem('ft_weight_history', JSON.stringify(hist));
       input.value = '';
       updateWeightDisplay();
       renderWeightChart();
+      renderWeightAnalytics();
+      renderGoalDistance();
       updateBodyRings();
       showToast('Weight logged');
     }
@@ -3557,9 +3905,7 @@
     function loadSupps() {
       const s = localStorage.getItem(SK_SUPPS);
       if (!s) return getDefaultSupps();
-      const saved = JSON.parse(s);
-      const required = getDefaultSupps().filter(d => !saved.some(x => x.name.toLowerCase() === d.name.toLowerCase()));
-      return [...saved, ...required];
+      return JSON.parse(s);
     }
     function saveSupps(supps) { localStorage.setItem(SK_SUPPS, JSON.stringify(supps)); }
     function getSuppLog() { return JSON.parse(localStorage.getItem(SK_SUPP_LOG) || '{}'); }
@@ -3598,6 +3944,7 @@
       log[today][id] = !log[today][id];
       saveSuppLog(log);
       renderSupps();
+      renderSuppHeatmap();
     }
     function showAddSuppForm() { document.getElementById('suppModal').style.display = 'flex'; }
     function hideSuppForm() { document.getElementById('suppModal').style.display = 'none'; }
@@ -3720,48 +4067,94 @@
       setTimeout(() => { toast.style.transform = 'translateX(-50%) translateY(-100px)'; }, 2200);
     }
 
-        // ── DIET ──
-    let activeDietDay = 0;
-    const dietPlans = [];
-    for(let i=0; i<15; i++) {
-        let isRest = (i+1) % 7 === 0;
-        let cals = isRest ? 2000 : 2200;
-        let carbs = isRest ? 180 : 220;
-        let type = isRest ? 'Rest Day' : 'Training Day';
-        let macros = { cals: cals, prot: '180g', carb: carbs+'g', fat: '60g' };
-        let micros = { iron: '15mg', calcium: '1000mg', vitD: '600 IU', zinc: '11mg' };
-        
-        let meals = [];
-        if (!isRest) {
-            meals = [
-                { time: 'Breakfast', name: '5 whole eggs + 2 multigrain rotis + 1 cup milk', note: 'High protein morning anchor.', prot: '40g', color: 'var(--acc2)' },
-                { time: 'Pre-workout', name: '1 banana + 30g oats + 1 scoop whey', note: 'Fast carbs + protein.', prot: '28g', color: 'var(--sky)' },
-                { time: 'Post-workout', name: '1 scoop whey + 1 apple', note: 'Fast absorption.', prot: '25g', color: 'var(--grn)' },
-                { time: 'Lunch', name: '200g paneer + 2 rotis + rajma + salad', note: 'Biggest meal. Max protein + fiber.', prot: '55g', color: 'var(--amb)' },
-                { time: 'Dinner', name: '4 egg-whites + dal + 1 roti + sabzi', note: 'Low carb end of day.', prot: '35g', color: 'var(--acc)' }
-            ];
-        } else {
-            meals = [
-                { time: 'Breakfast', name: '4 whole eggs + 1 roti + milk', note: 'Slightly lower carbs.', prot: '35g', color: 'var(--acc2)' },
-                { time: 'Lunch', name: '150g paneer + 2 rotis + salad', note: 'Moderate protein & fat.', prot: '40g', color: 'var(--amb)' },
-                { time: 'Snack', name: 'Greek yogurt + almonds', note: 'Healthy fats & probiotics.', prot: '15g', color: 'var(--ora)' },
-                { time: 'Dinner', name: 'Soya chunks sabzi + dal + 1 roti', note: 'High fiber, medium protein.', prot: '30g', color: 'var(--acc)' }
-            ];
-        }
-        
-        if (i%3===0) {
-            meals[0].name = 'Oats porridge with whey + 3 boiled eggs';
-            macros.cals += 50;
-        } else if (i%4===0) {
-            meals[meals.length-1].name = 'Chicken breast (150g) + veggies + 1 roti';
-            macros.prot = '190g';
-            micros.iron = '18mg';
-        }
-        
-        dietPlans.push({ day: i+1, type: type, macros: macros, proteinTarget: parseInt(macros.prot, 10), calorieTarget: cals, micros: micros, meals: meals });
+    // ── DIET ──
+    const SK_DIET_PLAN = 'ft_meal_plan_v1';
+    const SK_DIET_LOG = 'ft_diet_log_v1';
+
+    const MEAL_POOL = {
+      breakfast: [
+        { name: '5 whole eggs + 2 multigrain rotis + 1 cup milk', note: 'High protein morning anchor.', prot: '40g' },
+        { name: 'Oats porridge with whey + 3 boiled eggs', note: 'Complex carbs + protein.', prot: '38g' },
+        { name: 'Besan chilla (3) + paneer stuffing + curd', note: 'High protein, no bread.', prot: '35g' },
+        { name: 'Moong dal dosa (3) + sambar + boiled eggs (3)', note: 'South Indian high-protein.', prot: '36g' },
+        { name: 'Poha with peanuts + 2 boiled eggs + milk', note: 'Light yet protein-packed.', prot: '30g' },
+        { name: 'Overnight oats + whey + banana + almonds', note: 'No-cook prep ahead.', prot: '35g' },
+      ],
+      preworkout: [
+        { name: '1 banana + 30g oats + 1 scoop whey', note: 'Fast carbs + protein.', prot: '28g' },
+        { name: 'PB toast + black coffee', note: 'Sustained energy.', prot: '12g' },
+        { name: 'Rice cakes + honey + whey shake', note: 'Quick glycogen top-up.', prot: '25g' },
+        { name: 'Dates (4) + almonds (10) + espresso', note: 'Natural pre-workout.', prot: '8g' },
+      ],
+      postworkout: [
+        { name: '1 scoop whey + 1 apple', note: 'Fast absorption.', prot: '25g' },
+        { name: 'Whey shake + banana + honey', note: 'Insulin spike for recovery.', prot: '28g' },
+        { name: 'Chocolate milk (500ml) + banana', note: 'Classic recovery.', prot: '20g' },
+        { name: 'Greek yogurt + berries + honey', note: 'Casein + fast carbs.', prot: '22g' },
+      ],
+      lunch: [
+        { name: '200g paneer + 2 rotis + rajma + salad', note: 'Biggest meal. Max protein + fiber.', prot: '55g' },
+        { name: 'Chole (200g) + 2 rotis + raita + salad', note: 'Plant protein powerhouse.', prot: '40g' },
+        { name: 'Soya chunks curry + rice + dal + cucumber', note: 'Budget-friendly high protein.', prot: '48g' },
+        { name: 'Egg curry (4 eggs) + 2 rotis + salad', note: 'Egg-based power meal.', prot: '42g' },
+        { name: 'Rajma rice + curd + mixed veg sabzi', note: 'Complete protein combo.', prot: '38g' },
+        { name: 'Paneer bhurji + 3 rotis + dal tadka', note: 'North Indian classic.', prot: '52g' },
+      ],
+      dinner: [
+        { name: '4 egg-whites + dal + 1 roti + sabzi', note: 'Low carb end of day.', prot: '35g' },
+        { name: 'Tofu stir-fry + brown rice + raita', note: 'Light yet filling.', prot: '30g' },
+        { name: 'Moong dal khichdi + curd + papad', note: 'Easy to digest.', prot: '28g' },
+        { name: 'Palak paneer + 1 roti + salad', note: 'Iron + protein combo.', prot: '35g' },
+        { name: 'Soya chunks sabzi + dal + 1 roti', note: 'High fiber, medium protein.', prot: '30g' },
+        { name: 'Egg bhurji (4) + 1 roti + onion salad', note: 'Quick high-protein dinner.', prot: '32g' },
+      ]
+    };
+    const MEAL_COLORS = { breakfast: 'var(--acc2)', preworkout: 'var(--sky)', postworkout: 'var(--grn)', lunch: 'var(--amb)', dinner: 'var(--acc)' };
+    const MEAL_LABELS = { breakfast: 'Breakfast', preworkout: 'Pre-workout', postworkout: 'Post-workout', lunch: 'Lunch', dinner: 'Dinner' };
+
+    function pickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+    function generateMealPlan() {
+      const meals = Object.keys(MEAL_POOL).map(slot => {
+        const m = pickRandom(MEAL_POOL[slot]);
+        return { time: MEAL_LABELS[slot], name: m.name, note: m.note, prot: m.prot, color: MEAL_COLORS[slot] };
+      });
+      const totalProt = meals.reduce((s, m) => s + parseInt(m.prot, 10), 0);
+      return {
+        type: 'Training Day',
+        macros: { cals: 2200, prot: totalProt + 'g', carb: '220g', fat: '60g' },
+        micros: { iron: '15mg', calcium: '1000mg', vitD: '600 IU', zinc: '11mg' },
+        calorieTarget: 2200,
+        proteinTarget: totalProt,
+        meals
+      };
     }
 
-    const SK_DIET_LOG = 'ft_diet_log_v1';
+    function getActivePlan() {
+      const saved = localStorage.getItem(SK_DIET_PLAN);
+      if (saved) return JSON.parse(saved);
+      const plan = generateMealPlan();
+      localStorage.setItem(SK_DIET_PLAN, JSON.stringify(plan));
+      return plan;
+    }
+
+    function shuffleMealPlan() {
+      const icon = document.getElementById('shuffleIcon');
+      if (icon) { icon.style.transform = 'rotate(360deg)'; }
+      setTimeout(() => {
+        const plan = generateMealPlan();
+        localStorage.setItem(SK_DIET_PLAN, JSON.stringify(plan));
+        dietPlans[0] = plan;
+        renderDietContent();
+        renderNutritionChart();
+        showToast('New meal plan generated');
+      }, 300);
+    }
+
+    // Keep dietPlans for backward compat with editDietMeal
+    let activeDietDay = 0;
+    const dietPlans = [getActivePlan()];
+
     function getDietLog() { return JSON.parse(localStorage.getItem(SK_DIET_LOG) || '{}'); }
     function saveDietLog(log) { localStorage.setItem(SK_DIET_LOG, JSON.stringify(log)); }
 
@@ -3778,6 +4171,7 @@
       document.getElementById('dietCalsIn').value = '';
       document.getElementById('dietProtIn').value = '';
       renderDietContent();
+      renderNutritionChart();
       showToast('Diet logged');
     }
 
@@ -3786,21 +4180,59 @@
       delete log[getTodayKey()];
       saveDietLog(log);
       renderDietContent();
+      renderNutritionChart();
     }
 
-    function renderDietDays() {
-      const nav = document.getElementById('dietDaysNav');
-      if (!nav) return;
-      nav.innerHTML = dietPlans.map((p, i) => `
-        <button class="nb ${i === activeDietDay ? 'on' : ''}" onclick="selectDietDay(${i}, this)" style="flex-shrink:0">Day ${p.day}</button>
-      `).join('');
-    }
+    function renderDietDays() { /* no-op: days removed */ }
 
-    function selectDietDay(idx, btn) {
-      activeDietDay = idx;
-      document.querySelectorAll('#dietDaysNav .nb').forEach(b => b.classList.remove('on'));
-      if(btn) btn.classList.add('on');
-      renderDietContent();
+    function renderNutritionChart() {
+      const chart = document.getElementById('nutritionChart');
+      const labels = document.getElementById('nutritionLabels');
+      if (!chart) return;
+      const log = getDietLog();
+      const p = dietPlans[0] || { calorieTarget: 2200, proteinTarget: 180 };
+      const calGoal = p.calorieTarget || 2200;
+      const protGoal = p.proteinTarget || 180;
+      const days = [];
+      for (let i = 13; i >= 0; i--) {
+        const d = new Date(); d.setDate(d.getDate() - i);
+        const key = localDateKey(d);
+        const entry = log[key] || { cals: 0, prot: 0 };
+        days.push({ key, cals: entry.cals, prot: entry.prot, day: d });
+      }
+      // Goal line at 80% of chart height (goal = 80%, over-goal goes to 100%)
+      const dayNames = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+      let barsHtml = '';
+      let lblHtml = '';
+      let totalCals = 0, totalProt = 0, activeDays = 0;
+      days.forEach(d => {
+        const calPct = Math.min(100, (d.cals / calGoal) * 80);
+        const protPct = Math.min(100, (d.prot / protGoal) * 80);
+        const calH = d.cals > 0 ? Math.max(4, calPct) : 2;
+        const protH = d.prot > 0 ? Math.max(4, protPct) : 2;
+        const isToday = d.key === localDateKey();
+        const calColor = d.cals > 0 ? (d.cals >= calGoal ? 'var(--grn)' : 'var(--acc2)') : 'var(--bg3)';
+        const protColor = d.prot > 0 ? (d.prot >= protGoal ? 'var(--grn)' : 'var(--sky)') : 'var(--bg3)';
+        if (d.cals > 0 || d.prot > 0) { totalCals += d.cals; totalProt += d.prot; activeDays++; }
+        barsHtml += `<div style="flex:1;display:flex;gap:2px;align-items:flex-end;justify-content:center;height:100%">
+          <div style="width:40%;height:${calH}%;border-radius:3px 3px 0 0;background:${calColor};min-height:2px;transition:height .3s" title="${d.key}: ${d.cals}/${calGoal} kcal"></div>
+          <div style="width:40%;height:${protH}%;border-radius:3px 3px 0 0;background:${protColor};min-height:2px;transition:height .3s" title="${d.key}: ${d.prot}/${protGoal}g protein"></div>
+        </div>`;
+        lblHtml += `<div style="flex:1;text-align:center;font-size:9px;color:${isToday ? 'var(--acc2)' : 'var(--t3)'};font-weight:${isToday ? '700' : '400'}">${dayNames[d.day.getDay()]}</div>`;
+      });
+      // Goal line overlay
+      chart.style.position = 'relative';
+      chart.innerHTML = barsHtml + `<div style="position:absolute;left:0;right:0;bottom:80%;border-top:1px dashed rgba(45,212,160,0.3);pointer-events:none"><span style="position:absolute;right:0;top:-14px;font-size:9px;color:var(--grn);opacity:.6">goal</span></div>`;
+      labels.innerHTML = lblHtml;
+      // Summary below
+      const summaryEl = document.getElementById('nutritionSummary');
+      if (summaryEl) {
+        const avgCal = activeDays > 0 ? Math.round(totalCals / activeDays) : 0;
+        const avgProt = activeDays > 0 ? Math.round(totalProt / activeDays) : 0;
+        summaryEl.innerHTML = `
+          <div class="card"><div class="m-val" style="font-size:18px;color:var(--acc2)">${avgCal}</div><div class="m-lbl">avg kcal</div></div>
+          <div class="card"><div class="m-val" style="font-size:18px;color:var(--sky)">${avgProt}g</div><div class="m-lbl">avg protein</div></div>`;
+      }
     }
 
     function renderDietContent() {
@@ -3810,55 +4242,114 @@
       const todayLog = getDietLog()[getTodayKey()] || { cals: 0, prot: 0 };
       const calPct = Math.min(100, Math.round((todayLog.cals / p.calorieTarget) * 100));
       const protPct = Math.min(100, Math.round((todayLog.prot / p.proteinTarget) * 100));
+      const calColor = calPct > 100 ? 'var(--red)' : calPct > 80 ? 'var(--grn)' : 'var(--acc2)';
+      const protColor = protPct > 100 ? 'var(--red)' : protPct > 80 ? 'var(--grn)' : 'var(--sky)';
+      const totalProt = p.meals.reduce((s, m) => s + parseInt(m.prot, 10), 0);
       const html = `
-        <p class="slbl">${p.type} targets</p>
-        <div class="card" style="margin-bottom:12px">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-            <div style="font-weight:700">Today intake</div>
-            <button class="edit-btn" style="flex:0;padding:7px 10px" onclick="resetDietLog()">Reset</button>
+        <!-- Today's Intake -->
+        <div class="card" style="margin-bottom:12px;position:relative;overflow:hidden">
+          <div style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(123,111,255,0.08),transparent 70%);pointer-events:none"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+            <div>
+              <div style="font-weight:800;font-size:16px;letter-spacing:-.2px">Today's intake</div>
+              <div style="font-size:11px;color:var(--t3);margin-top:2px">${p.type} · Log your intake below</div>
+            </div>
+            <button class="edit-btn" style="flex:0;padding:7px 12px;font-size:11px" onclick="resetDietLog()">Reset</button>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
-            <div><div class="m-lbl">Calories</div><div style="font-weight:800">${todayLog.cals}/${p.calorieTarget}</div><div class="prog-bar-wrap" style="margin:6px 0 0"><div class="prog-bar" style="width:${calPct}%"></div></div></div>
-            <div><div class="m-lbl">Protein</div><div style="font-weight:800">${todayLog.prot}/${p.proteinTarget}g</div><div class="prog-bar-wrap" style="margin:6px 0 0"><div class="prog-bar" style="width:${protPct}%"></div></div></div>
+          <div style="display:flex;gap:16px;justify-content:center;margin-bottom:16px">
+            <div style="text-align:center">
+              <div class="ring" style="--p:${calPct};--c:${calColor};width:88px;height:88px">
+                <div style="position:relative;text-align:center">
+                  <div class="ring-val" style="font-size:14px">${todayLog.cals}</div>
+                  <div class="ring-unit" style="font-size:9px">/ ${p.calorieTarget}</div>
+                </div>
+              </div>
+              <div style="font-size:11px;color:var(--t2);margin-top:6px;font-weight:600">Calories</div>
+            </div>
+            <div style="text-align:center">
+              <div class="ring" style="--p:${protPct};--c:${protColor};width:88px;height:88px">
+                <div style="position:relative;text-align:center">
+                  <div class="ring-val" style="font-size:14px">${todayLog.prot}g</div>
+                  <div class="ring-unit" style="font-size:9px">/ ${p.proteinTarget}g</div>
+                </div>
+              </div>
+              <div style="font-size:11px;color:var(--t2);margin-top:6px;font-weight:600">Protein</div>
+            </div>
           </div>
           <div style="display:flex;gap:8px">
-            <input id="dietCalsIn" class="input" type="number" inputmode="numeric" placeholder="kcal">
-            <input id="dietProtIn" class="input" type="number" inputmode="numeric" placeholder="protein">
+            <input id="dietCalsIn" class="input" type="number" inputmode="numeric" placeholder="+ kcal" style="flex:1">
+            <input id="dietProtIn" class="input" type="number" inputmode="numeric" placeholder="+ protein (g)" style="flex:1">
             <button class="btn" onclick="addDietLog()">Add</button>
           </div>
         </div>
-        <div class="metric-2">
-          <div class="m"><div class="m-val" style="color:var(--acc2)">${p.macros.cals}</div><div class="m-lbl">kcal</div></div>
-          <div class="m"><div class="m-val" style="color:var(--grn)">${p.macros.prot}</div><div class="m-lbl">protein</div></div>
-          <div class="m"><div class="m-val" style="color:var(--sky)">${p.macros.carb}</div><div class="m-lbl">carbs</div></div>
-          <div class="m"><div class="m-val" style="color:var(--amb)">${p.macros.fat}</div><div class="m-lbl">fats</div></div>
+
+        <!-- Macro Targets -->
+        <p class="slbl">Macros</p>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px">
+          <div class="card" style="padding:14px 10px;text-align:center;position:relative;overflow:hidden">
+            <div style="font-size:16px;margin-bottom:4px">🔥</div>
+            <div style="font-size:18px;font-weight:800;color:var(--acc2)">${p.macros.cals}</div>
+            <div style="font-size:9px;color:var(--t3);font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-top:2px">kcal</div>
+          </div>
+          <div class="card" style="padding:14px 10px;text-align:center">
+            <div style="font-size:16px;margin-bottom:4px">💪</div>
+            <div style="font-size:18px;font-weight:800;color:var(--grn)">${p.macros.prot}</div>
+            <div style="font-size:9px;color:var(--t3);font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-top:2px">protein</div>
+          </div>
+          <div class="card" style="padding:14px 10px;text-align:center">
+            <div style="font-size:16px;margin-bottom:4px">🍞</div>
+            <div style="font-size:18px;font-weight:800;color:var(--sky)">${p.macros.carb}</div>
+            <div style="font-size:9px;color:var(--t3);font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-top:2px">carbs</div>
+          </div>
+          <div class="card" style="padding:14px 10px;text-align:center">
+            <div style="font-size:16px;margin-bottom:4px">🥑</div>
+            <div style="font-size:18px;font-weight:800;color:var(--amb)">${p.macros.fat}</div>
+            <div style="font-size:9px;color:var(--t3);font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-top:2px">fats</div>
+          </div>
         </div>
-        <p class="slbl" style="margin-top:16px">Micronutrients</p>
-        <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:12px;scrollbar-width:none" class="nav-scroll">
-          <div class="card" style="padding:8px 12px;min-width:80px;text-align:center">
-            <div style="font-size:10px;color:var(--t3)">Iron</div>
-            <div style="font-weight:600;color:var(--t1)">${p.micros.iron}</div>
+
+        <!-- Micronutrients -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px">
+          <div style="background:var(--bg3);border-radius:10px;padding:10px 8px;text-align:center;border:.5px solid var(--b1)">
+            <div style="font-size:9px;color:var(--t3);font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px">Iron</div>
+            <div style="font-size:13px;font-weight:700;color:var(--t1)">${p.micros.iron}</div>
           </div>
-          <div class="card" style="padding:8px 12px;min-width:80px;text-align:center">
-            <div style="font-size:10px;color:var(--t3)">Calcium</div>
-            <div style="font-weight:600;color:var(--t1)">${p.micros.calcium}</div>
+          <div style="background:var(--bg3);border-radius:10px;padding:10px 8px;text-align:center;border:.5px solid var(--b1)">
+            <div style="font-size:9px;color:var(--t3);font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px">Calcium</div>
+            <div style="font-size:13px;font-weight:700;color:var(--t1)">${p.micros.calcium}</div>
           </div>
-          <div class="card" style="padding:8px 12px;min-width:80px;text-align:center">
-            <div style="font-size:10px;color:var(--t3)">Vit D</div>
-            <div style="font-weight:600;color:var(--t1)">${p.micros.vitD}</div>
+          <div style="background:var(--bg3);border-radius:10px;padding:10px 8px;text-align:center;border:.5px solid var(--b1)">
+            <div style="font-size:9px;color:var(--t3);font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px">Vit D</div>
+            <div style="font-size:13px;font-weight:700;color:var(--t1)">${p.micros.vitD}</div>
           </div>
-          <div class="card" style="padding:8px 12px;min-width:80px;text-align:center">
-            <div style="font-size:10px;color:var(--t3)">Zinc</div>
-            <div style="font-weight:600;color:var(--t1)">${p.micros.zinc}</div>
+          <div style="background:var(--bg3);border-radius:10px;padding:10px 8px;text-align:center;border:.5px solid var(--b1)">
+            <div style="font-size:9px;color:var(--t3);font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px">Zinc</div>
+            <div style="font-size:13px;font-weight:700;color:var(--t1)">${p.micros.zinc}</div>
           </div>
         </div>
-        <p class="slbl">Meal Plan</p>
+
+        <!-- Meals -->
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <div style="display:flex;align-items:center;gap:6px">
+            <p class="slbl" style="margin:0">Meal plan</p>
+            <button onclick="shuffleMealPlan()" style="background:none;border:none;padding:2px;cursor:pointer;color:var(--sky);display:flex;margin-top:4px" title="Generate new plan">
+              <svg id="shuffleIcon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .3s ease-in-out"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
+            </button>
+          </div>
+          <div style="font-size:11px;color:var(--t3);font-weight:600">~${totalProt}g protein</div>
+        </div>
         ${p.meals.map((m, idx) => `
           <div class="meal" style="--meal-acc:${m.color}">
-            <div class="meal-time">${m.time}</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+              <div class="meal-time">${m.time}</div>
+              <div style="font-size:12px;font-weight:800;color:${m.color}">~${m.prot}</div>
+            </div>
             <div class="meal-name">${m.name}</div>
             <div class="meal-note">${m.note}</div>
-            <div class="meal-footer"><span class="meal-prot">~${m.prot} protein</span><button class="edit-btn" style="flex:0;padding:6px 10px" onclick="editDietMeal(${activeDietDay},${idx})">Edit</button></div>
+            <div class="meal-footer">
+              <span class="meal-prot">~${m.prot} protein</span>
+              <button class="edit-btn" style="flex:0;padding:6px 10px" onclick="editDietMeal(${activeDietDay},${idx})">Edit</button>
+            </div>
           </div>
         `).join('')}
       `;
@@ -3872,12 +4363,13 @@
       meal.name = name;
       meal.note = prompt('Note', meal.note) || meal.note;
       meal.prot = prompt('Protein', meal.prot) || meal.prot;
+      localStorage.setItem(SK_DIET_PLAN, JSON.stringify(dietPlans[0]));
       renderDietContent();
-      showToast('Meal edited for this session');
+      showToast('Meal updated');
     }
 
 
-        // ── MOBILITY ──
+    // ── MOBILITY ──
     function defaultMobilityRoutines() {
       return [
         { id: 'mob_pre_dynamic', phase: 'Pre', name: 'Dynamic Warm-up', note: '5 min. Arm circles, leg swings, hip openers, scap push-ups.', checked: false, lastDate: '' },
@@ -3897,16 +4389,16 @@
 
     let mobilityRoutines = loadMobilityRoutines();
     let editingMobId = null;
-    
+
     function saveMobility() {
       localStorage.setItem('ft_mobility_v1', JSON.stringify(mobilityRoutines));
     }
-    
+
     function renderMobility() {
       const list = document.getElementById('mobilityList');
       if (!list) return;
       const today = new Date().toDateString();
-      
+
       list.innerHTML = mobilityRoutines.map(m => {
         if (m.lastDate !== today) { m.checked = false; }
         return `
@@ -3928,7 +4420,7 @@
       }).join('');
       saveMobility();
     }
-    
+
     function toggleMob(id) {
       const m = mobilityRoutines.find(x => x.id === id);
       if (m) {
@@ -3937,14 +4429,14 @@
         renderMobility();
       }
     }
-    
+
     function delMob(id) {
-      if(confirm('Delete routine?')) {
+      if (confirm('Delete routine?')) {
         mobilityRoutines = mobilityRoutines.filter(x => x.id !== id);
         renderMobility();
       }
     }
-    
+
     function addMob() {
       const name = document.getElementById('mobNameInput').value.trim();
       const note = document.getElementById('mobNoteInput').value.trim();
@@ -3956,7 +4448,7 @@
           m.note = note;
         }
       } else {
-        mobilityRoutines.push({ id: Date.now()+'', phase: 'Custom', name, note, checked: false, lastDate: '' });
+        mobilityRoutines.push({ id: Date.now() + '', phase: 'Custom', name, note, checked: false, lastDate: '' });
       }
       document.getElementById('mobNameInput').value = '';
       document.getElementById('mobNoteInput').value = '';
@@ -3997,6 +4489,7 @@
     renderMobility();
     renderDietDays();
     renderDietContent();
+    renderNutritionChart();
     renderWeightChart();
     renderMeasurements();
     renderWorkoutInsights();
@@ -4017,7 +4510,7 @@
     }
     if (shouldRegisterServiceWorker()) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js').catch(() => {});
+        navigator.serviceWorker.register('sw.js').catch(() => { });
       });
     }
 
@@ -4028,15 +4521,20 @@
   </script>
 
   <!-- EXERCISE LIBRARY MODAL -->
-  <div id="libModal" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:2100;flex-direction:column;animation:slideIn 0.3s cubic-bezier(.32,1,.28,1)">
-    <div style="padding:env(safe-area-inset-top,20px) 16px 12px;background:var(--card);border-bottom:1px solid var(--b2);display:flex;align-items:center;gap:12px">
-      <button class="btn" style="width:36px;height:36px;padding:0;background:var(--bg2)" onclick="closeLibrary()">✕</button>
+  <div id="libModal"
+    style="display:none;position:fixed;inset:0;background:var(--bg);z-index:2100;flex-direction:column;animation:slideIn 0.3s cubic-bezier(.32,1,.28,1)">
+    <div
+      style="padding:env(safe-area-inset-top,20px) 16px 12px;background:var(--card);border-bottom:1px solid var(--b2);display:flex;align-items:center;gap:12px">
+      <button class="btn" style="width:36px;height:36px;padding:0;background:var(--bg2)"
+        onclick="closeLibrary()">✕</button>
       <div style="flex:1">
-        <input type="text" id="libSearch" class="input" placeholder="Search exercises..." style="width:100%" oninput="filterLibrary()">
+        <input type="text" id="libSearch" class="input" placeholder="Search exercises..." style="width:100%"
+          oninput="filterLibrary()">
       </div>
     </div>
-    
-    <div style="padding:12px 16px;display:flex;gap:8px;overflow-x:auto;border-bottom:1px solid var(--b2);scrollbar-width:none">
+
+    <div
+      style="padding:12px 16px;display:flex;gap:8px;overflow-x:auto;border-bottom:1px solid var(--b2);scrollbar-width:none">
       <button class="tag active" id="libFilter_all" onclick="setLibFilter('all')">All</button>
       <button class="tag" id="libFilter_chest" onclick="setLibFilter('chest')">Chest</button>
       <button class="tag" id="libFilter_back" onclick="setLibFilter('back')">Back</button>
@@ -4045,10 +4543,11 @@
       <button class="tag" id="libFilter_arms" onclick="setLibFilter('arms')">Arms</button>
       <button class="tag" id="libFilter_core" onclick="setLibFilter('core')">Core</button>
     </div>
-    
+
     <div id="libList" style="flex:1;overflow-y:auto;padding:12px 16px;"></div>
-    
-    <div style="padding:16px;padding-bottom:calc(16px + env(safe-area-inset-bottom, 20px));border-top:1px solid var(--b2);background:var(--card)">
+
+    <div
+      style="padding:16px;padding-bottom:calc(16px + env(safe-area-inset-bottom, 20px));border-top:1px solid var(--b2);background:var(--card)">
       <div style="font-weight:600;font-size:14px;margin-bottom:8px">Create Custom</div>
       <div style="display:flex;gap:8px">
         <input type="text" id="libCustomInput" class="input" placeholder="Custom exercise name" style="flex:1">
@@ -4060,9 +4559,13 @@
   <!-- REST TIMER -->
   <div class="rest-timer" id="restTimer">
     <div style="font-size:18px">⏱</div>
-    <div id="restTimerVal" style="font-size:18px;font-weight:700;color:var(--t1);width:48px;text-align:center">1:00</div>
-    <button style="background:var(--bg2);border:none;color:var(--t1);padding:6px 10px;border-radius:6px;font-weight:600;font-size:12px;cursor:pointer" onclick="addRestTime(30)">+30s</button>
-    <button style="background:none;border:none;color:var(--t2);font-size:16px;cursor:pointer;padding:0 4px" onclick="closeRestTimer()">×</button>
+    <div id="restTimerVal" style="font-size:18px;font-weight:700;color:var(--t1);width:48px;text-align:center">1:00
+    </div>
+    <button
+      style="background:var(--bg2);border:none;color:var(--t1);padding:6px 10px;border-radius:6px;font-weight:600;font-size:12px;cursor:pointer"
+      onclick="addRestTime(30)">+30s</button>
+    <button style="background:none;border:none;color:var(--t2);font-size:16px;cursor:pointer;padding:0 4px"
+      onclick="closeRestTimer()">×</button>
   </div>
 
 </body>

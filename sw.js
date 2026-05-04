@@ -1,6 +1,6 @@
-const CACHE_VERSION = "training-hub-v2";
+const CACHE_VERSION = "fitpal-v1";
 const APP_SHELL = [
-  "./fitness_hub_v3.html",
+  "./fitness_hub.html",
   "./manifest.webmanifest"
 ];
 
@@ -51,7 +51,7 @@ self.addEventListener("fetch", (event) => {
           caches
             .match(event.request)
             .then((cached) =>
-              cached || caches.match(new URL("./fitness_hub_v3.html", self.location.href))
+              cached || caches.match(new URL("./fitness_hub.html", self.location.href))
             )
         )
     );
