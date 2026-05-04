@@ -1,0 +1,15 @@
+{
+  "name": "Training Hub",
+  "short_name": "Training Hub",
+  "id": "./fitness_hub_v3.html",
+  "description": "Offline-ready single-file fitness tracker for workouts, diet, supplements, mobility, and progress.",
+  "start_url": "./fitness_hub_v3.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#06060B",
+  "theme_color": "#06060B",
+  "categories": ["fitness", "health", "productivity"],
+  "lang": "en",
+  "dir": "ltr"
+}
