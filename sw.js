@@ -1,4 +1,4 @@
-const CACHE_VERSION = "fitpal-v1";
+const CACHE_VERSION = "fitpal-v2";
 const APP_SHELL = [
   "./fitness_hub.html",
   "./manifest.webmanifest"

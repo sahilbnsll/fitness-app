@@ -3,15 +3,31 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport"
-    content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1,user-scalable=no">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="FitPal">
   <meta name="theme-color" content="#06060B">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="FitPal — offline-first fitness tracker. Log PPL workouts, diet, supplements, streaks, and PRs. No accounts, no cloud, local-only data.">
+  <meta name="format-detection" content="telephone=no">
+  <meta property="og:title" content="FitPal">
+  <meta property="og:description" content="Offline-first fitness tracker. Workouts, nutrition, supplements, and progress — private by design.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
   <link rel="manifest" href="manifest.webmanifest">
-  <title>FitPal</title>
+  <!-- Inline SVG favicon (zero extra request, works offline) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%237B6FFF'/><text x='50%25' y='54%25' font-family='-apple-system,Segoe UI,Roboto,sans-serif' font-size='34' font-weight='800' text-anchor='middle' dominant-baseline='middle' fill='white'>F</text></svg>">
+  <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%237B6FFF'/><text x='50%25' y='56%25' font-family='-apple-system,Segoe UI,Roboto,sans-serif' font-size='96' font-weight='800' text-anchor='middle' dominant-baseline='middle' fill='white'>F</text></svg>">
+  <title>FitPal — Offline Fitness Tracker</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Non-blocking font load: browser downloads as low-priority, swaps in when ready. Fallback covers FOUT. -->
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"></noscript>
 </head>
 
 <body>
@@ -53,23 +69,60 @@
       margin: 0;
       padding: 0;
       -webkit-tap-highlight-color: transparent;
-      -webkit-font-smoothing: antialiased
+      -webkit-font-smoothing: antialiased;
+      text-size-adjust: 100%;
+      -webkit-text-size-adjust: 100%;
     }
 
     html {
-      scroll-behavior: smooth
+      scroll-behavior: smooth;
+      /* Prevent overscroll bounce revealing black on iOS */
+      background: var(--bg);
     }
 
     body {
       background: var(--bg);
       color: var(--t1);
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;
       font-size: 15px;
       line-height: 1.5;
-      padding-bottom: calc(96px + env(safe-area-inset-bottom, 20px));
+      padding-bottom: calc(104px + env(safe-area-inset-bottom, 20px));
       overflow-x: hidden;
       width: 100%;
-      min-height: 100vh
+      min-height: 100vh;
+      min-height: 100dvh;
+    }
+
+    /* Accessible keyboard focus ring — never remove without replacement */
+    :focus:not(:focus-visible) { outline: none; }
+    :focus-visible {
+      outline: 2px solid var(--acc2);
+      outline-offset: 2px;
+      border-radius: 6px;
+    }
+
+    /* Respect reduced motion preferences */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* Interactive elements should all be at least 44×44 touch targets (WCAG 2.5.5) */
+    button, [role="button"], a, input[type="button"], input[type="submit"] {
+      touch-action: manipulation;
+    }
+
+    /* Screen-reader-only utility */
+    .sr-only {
+      position: absolute !important;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0);
+      white-space: nowrap; border: 0;
     }
 
     #app {
@@ -103,26 +156,27 @@
       cursor: pointer;
       font-size: 13px;
       font-weight: 700;
-      padding: 11px 14px;
-      transition: transform .15s, opacity .15s
+      padding: 12px 16px;
+      min-height: 44px;
+      transition: transform .15s, opacity .15s;
     }
 
     .btn:active {
       transform: scale(.97);
       opacity: 0.9;
     }
-    
+
     .edit-btn {
       background: var(--card2);
       border: .5px solid var(--b2);
       border-radius: 8px;
       color: var(--t2);
-      padding: 8px 12px;
-      font-size: 11px;
+      padding: 10px 14px;
+      font-size: 12px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s;
-      min-height: 32px;
+      transition: background .2s, color .2s, border-color .2s;
+      min-height: 40px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -256,19 +310,20 @@
 
     .weight-btn {
       background: var(--glass);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       border: 0.5px solid var(--b2);
       border-radius: 12px;
-      padding: 8px 14px;
-      display: flex;
+      padding: 10px 14px;
+      min-height: 40px;
+      display: inline-flex;
       align-items: center;
       gap: 7px;
       cursor: pointer;
       color: var(--t2);
       font-size: 12px;
       font-weight: 500;
-      transition: all .2s ease
+      transition: transform .2s ease, border-color .2s ease;
     }
 
     .weight-btn:active {
@@ -762,8 +817,13 @@
 
     .day-arr {
       color: var(--t3);
-      font-size: 11px;
-      transition: transform .25s cubic-bezier(.34, 1.56, .64, 1)
+      font-size: 12px;
+      min-width: 24px;
+      min-height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform .25s cubic-bezier(.34, 1.56, .64, 1);
     }
 
     .day-arr.open {
@@ -891,21 +951,21 @@
     }
 
     .ex-del {
-      width: 28px;
-      height: 28px;
-      border-radius: 8px;
+      min-width: 44px;
+      min-height: 44px;
+      border-radius: 10px;
       background: var(--red-s);
       border: 0.5px solid rgba(240, 96, 112, 0.2);
-      display: flex;
+      display: none;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       color: var(--red);
-      font-size: 16px;
+      font-size: 18px;
+      line-height: 1;
       flex-shrink: 0;
-      margin-top: 1px;
-      display: none;
-      transition: transform .15s
+      padding: 0;
+      transition: transform .15s;
     }
 
     .ex-del:active {
@@ -914,7 +974,7 @@
 
     /* EDIT MODE */
     .edit-mode .ex-del {
-      display: flex
+      display: inline-flex;
     }
 
     .edit-mode .day-badge {
@@ -968,7 +1028,7 @@
       border-radius: 12px;
       padding: 12px 14px;
       color: var(--t1);
-      font-size: 13px;
+      font-size: 16px; /* 16px prevents iOS Safari auto-zoom on focus */
       font-family: inherit;
       margin-bottom: 8px;
       outline: none;
@@ -1566,38 +1626,40 @@
 
     .bottom-nav {
       position: fixed;
-      bottom: 12px;
-      left: 12px;
-      right: 12px;
+      bottom: max(12px, env(safe-area-inset-bottom, 12px));
+      left: 50%;
+      transform: translateX(-50%);
       width: calc(100% - 24px);
       max-width: 736px;
-      background: rgba(20, 20, 30, 0.8);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
+      background: rgba(20, 20, 30, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border: 1px solid var(--b2);
       border-radius: 24px;
       display: flex;
       justify-content: space-around;
-      padding: 10px 6px calc(10px + env(safe-area-inset-bottom, 0px));
+      padding: 8px 6px;
       z-index: 1000;
       box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-      margin: 0 auto;
     }
 
     .bn {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 5px;
+      justify-content: center;
+      gap: 4px;
       color: var(--t3);
       background: none;
       border: none;
       font-size: 10px;
       font-weight: 600;
-      transition: all 0.2s;
+      transition: color .2s;
       flex: 1;
-      padding: 6px 0;
+      padding: 8px 2px;
+      min-height: 56px;
       position: relative;
+      cursor: pointer;
     }
 
     .bn.on {
@@ -1617,19 +1679,13 @@
 
     .bn-icon {
       font-size: 20px;
-      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    
-    .bn.on .bn-icon {
-      transform: translateY(-2px) scale(1.1);
-    }
-      font-size: 22px;
-      margin-bottom: 2px;
-      filter: grayscale(100%) opacity(0.5);
-      transition: all 0.2s;
+      line-height: 1;
+      filter: grayscale(100%) opacity(0.65);
+      transition: transform .2s cubic-bezier(.175, .885, .32, 1.275), filter .2s ease;
     }
 
     .bn.on .bn-icon {
+      transform: translateY(-2px) scale(1.1);
       filter: grayscale(0%) opacity(1);
     }
 
@@ -1713,19 +1769,23 @@
 
     .rest-timer {
       position: fixed;
-      bottom: 80px;
+      /* Bottom-nav is ~72-88px (56px content + 16px padding + safe-area). Sit above it with a gap. */
+      bottom: calc(88px + env(safe-area-inset-bottom, 12px));
       left: 50%;
       transform: translateX(-50%);
       background: var(--card2);
       border: 1px solid var(--sky);
       border-radius: 20px;
-      padding: 8px 16px;
+      padding: 10px 16px;
+      min-height: 44px;
       display: none;
       align-items: center;
       gap: 12px;
       z-index: 1200;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
       backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      max-width: calc(100% - 32px);
     }
 
     .rest-timer.active {
@@ -1895,29 +1955,79 @@
     @media (min-width: 720px) {
       #app {
         border-left: 1px solid var(--b1);
-        border-right: 1px solid var(--b1)
+        border-right: 1px solid var(--b1);
       }
+    }
 
-      .bottom-nav {
-        border-left: 1px solid var(--b1);
-        border-right: 1px solid var(--b1)
-      }
+    /* ---------- Small phones (≤ 380px, e.g. iPhone SE, small Androids) ---------- */
+    @media (max-width: 380px) {
+      .hero { padding-left: 16px; padding-right: 16px; }
+      .hero h1 { font-size: 28px; }
+      .nav-wrap, .view { padding-left: 16px; padding-right: 16px; }
+      .stat, .m { padding: 14px; }
+      .stat-val, .m-val { font-size: 22px; }
+      .nb { padding: 10px 14px; font-size: 12px; }
+      .bn { font-size: 9px; }
+      .bn-icon { font-size: 18px; }
+      .day-head { padding: 14px 16px; gap: 10px; }
+      .day-badge { width: 40px; height: 40px; }
+      .ex-row { padding: 12px 16px; gap: 10px; }
+      .modal-input { font-size: 20px; padding: 14px 50px 14px 16px; }
+      .tracker-card { padding: 16px; }
+    }
+
+    /* ---------- Mid-size phones landscape / tablets (≥ 480px) ---------- */
+    @media (min-width: 480px) {
+      .stats-grid { grid-template-columns: repeat(4, 1fr); }
+      .metric-2 { grid-template-columns: repeat(4, 1fr); }
+      .mini-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    /* ---------- Landscape mobile — keep content usable under short height ---------- */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .hero { padding-top: 10px; padding-bottom: 14px; }
+      .hero h1 { font-size: 22px; }
+      .modal { max-height: 90vh; overflow-y: auto; }
+    }
+
+    /* ---------- Windows/Edge: compensate for scrollbar — no right-edge gap ---------- */
+    @supports selector(::-webkit-scrollbar) {
+      body { scrollbar-gutter: stable; }
+    }
+
+    /* ---------- Print (rare but trivial) ---------- */
+    @media print {
+      .bottom-nav, .rest-timer, .modal-overlay, .workout-mode { display: none !important; }
+      body { background: #fff; color: #000; padding-bottom: 0; }
+      .card, .tracker-card { background: #fff !important; border: 1px solid #ccc !important; box-shadow: none !important; backdrop-filter: none !important; }
     }
   </style>
 
   <div id="app">
 
     <!-- WEIGHT MODAL -->
-    <div class="modal-overlay" id="weightModal" onclick="closeWeightModal(event)">
+    <div class="modal-overlay" id="weightModal" onclick="closeWeightModal(event)" role="dialog" aria-modal="true" aria-labelledby="weightModalTitle" aria-hidden="true" inert>
       <div class="modal">
-        <div class="modal-title">Update weight</div>
+        <div class="modal-title" id="weightModalTitle">Update weight</div>
         <div class="modal-sub">Tracked weekly every Sunday fasted</div>
         <div class="modal-input-wrap">
-          <input class="modal-input" type="number" id="weightInput" placeholder="102" min="40" max="200" step="0.1">
-          <span class="modal-unit">kg</span>
+          <label for="weightInput" class="sr-only">Weight in kilograms</label>
+          <input class="modal-input" type="number" id="weightInput" placeholder="102" min="40" max="200" step="0.1" inputmode="decimal" autocomplete="off">
+          <span class="modal-unit" aria-hidden="true">kg</span>
         </div>
         <button class="modal-btn" onclick="saveWeight()">Save</button>
         <button class="modal-cancel" onclick="closeWeightModal()">Cancel</button>
+      </div>
+    </div>
+
+    <!-- GENERIC PROMPT/CONFIRM MODAL (replaces native prompt/confirm) -->
+    <div class="modal-overlay" id="genericModal" role="dialog" aria-modal="true" aria-labelledby="genericModalTitle" aria-hidden="true" inert tabindex="-1">
+      <div class="modal">
+        <div class="modal-title" id="genericModalTitle">Prompt</div>
+        <div class="modal-sub" id="genericModalSub"></div>
+        <div id="genericModalFields" style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px"></div>
+        <button class="modal-btn" id="genericModalOk" type="button">Save</button>
+        <button class="modal-cancel" id="genericModalCancel" type="button">Cancel</button>
       </div>
     </div>
 
@@ -1962,9 +2072,9 @@
 
     <!-- WORKOUTS -->
     <div id="workouts" class="view active">
-      <p class="slbl">This week</p>
+      <h2 class="slbl">This week</h2>
       <div class="action-row">
-        <button class="btn" onclick="quickStartWorkout()">Quick Start</button>
+        <button class="btn" onclick="quickStartWorkout()" aria-label="Start today's planned workout">Quick Start</button>
       </div>
       <div id="todaySuggestion" class="alert purple" style="margin-bottom:12px"></div>
 
@@ -2009,7 +2119,7 @@
         </div>
       </div>
 
-      <p class="slbl">Tap a day to expand · hold edit to modify</p>
+      <h2 class="slbl">Tap a day to expand · hold edit to modify</h2>
 
       <!-- DAY CARDS -->
       <div id="dayCards"></div>
@@ -2017,7 +2127,7 @@
 
     <!-- CARDIO -->
     <div id="cardio" class="view">
-      <p class="slbl">Cardio protocol — optimised</p>
+      <h2 class="slbl">Cardio protocol — optimised</h2>
       <div class="alert warn" style="margin-bottom:14px">
         <div class="alert-icon">!</div>
         <div class="alert-content">
@@ -2113,7 +2223,7 @@
           <div style="display:flex;align-items:center;gap:10px">
             <div style="font-size:12px;color:var(--t2)" id="suppTakenCount">0/0</div>
             <button class="btn" style="padding:6px 14px;font-size:12px"
-              onclick="document.getElementById('suppModal').style.display='flex'">+ Add</button>
+              onclick="openSuppModal()">+ Add</button>
           </div>
         </div>
         <div id="suppList"></div>
@@ -2150,7 +2260,7 @@
 
     <div id="tracking" class="view">
       <!-- Weight Overview -->
-      <p class="slbl">Weight tracking</p>
+      <h2 class="slbl">Weight tracking</h2>
       <div style="display:flex;gap:10px;margin-bottom:12px">
         <div class="card" style="flex:1;position:relative;overflow:hidden">
           <div
@@ -2223,7 +2333,7 @@
       <div class="mini-grid" style="margin-bottom:12px" id="weightAnalytics"></div>
 
       <!-- Exercise PRs -->
-      <p class="slbl">Exercise PRs</p>
+      <h2 class="slbl">Exercise PRs</h2>
       <div class="card" style="margin-bottom:12px">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
           <div style="font-weight:700;font-size:14px">Personal Records</div>
@@ -2247,7 +2357,7 @@
     </div>
 
     <div id="deload" class="view">
-      <p class="slbl">Schedule every 6-8 weeks</p>
+      <h2 class="slbl">Schedule every 6-8 weeks</h2>
       <div class="alert info" style="margin-bottom:14px">
         <div class="alert-icon">i</div>
         <div class="alert-content">
@@ -2283,7 +2393,7 @@
           <div class="deload-text">Sleep 8+ hours every night — this week is recovery, not punishment</div>
         </div>
       </div>
-      <p class="slbl">Signs you need an early deload</p>
+      <h2 class="slbl">Signs you need an early deload</h2>
       <ul class="plist">
         <li>Strength dropping for 2+ consecutive weeks</li>
         <li>Persistent joint soreness — elbows, shoulders, or knees</li>
@@ -2302,10 +2412,11 @@
     </div>
 
     <!-- SUPP MODAL -->
-    <div id="suppModal"
-      style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:2000;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(8px)">
+    <div id="suppModal" role="dialog" aria-modal="true" aria-labelledby="suppModalTitle" aria-hidden="true" inert tabindex="-1"
+      style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:2000;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(8px)"
+      onclick="if(event.target===this)closeSuppModal()">
       <div class="card" style="width:100%;max-width:400px">
-        <div style="font-size:16px;font-weight:600;margin-bottom:16px">Add Supplement</div>
+        <div id="suppModalTitle" style="font-size:16px;font-weight:600;margin-bottom:16px">Add Supplement</div>
         <input type="text" id="suppNameInput" class="input" placeholder="Name (e.g. Creatine)"
           style="margin-bottom:12px">
         <input type="text" id="suppDoseInput" class="input" placeholder="Dosage (e.g. 5g daily)"
@@ -2313,7 +2424,7 @@
         <input type="text" id="suppWhyInput" class="input" placeholder="Purpose" style="margin-bottom:16px">
         <div style="display:flex;gap:8px">
           <button class="btn" style="flex:1;background:var(--card2)"
-            onclick="document.getElementById('suppModal').style.display='none'">Cancel</button>
+            onclick="closeSuppModal()">Cancel</button>
           <button class="btn" style="flex:1" onclick="addSupp()">Save</button>
         </div>
       </div>
@@ -2321,16 +2432,16 @@
 
     <!-- MORE VIEW (Created for extra tabs) -->
     <div id="more" class="view">
-      <p class="slbl">More</p>
-      <div class="card" style="margin-bottom:12px" onclick="nav('mobility', document.getElementById('bn-more'))">
+      <h2 class="slbl">More</h2>
+      <button type="button" class="card" style="display:block;width:100%;text-align:left;font-family:inherit;margin-bottom:12px" onclick="nav('mobility', document.getElementById('bn-more'))">
         <div style="font-weight:600;font-size:15px;color:var(--t1)">🧘‍♂️ Mobility &amp; Stretching</div>
-      </div>
-      <div class="card" style="margin-bottom:12px" onclick="nav('cardio', document.getElementById('bn-more'))">
+      </button>
+      <button type="button" class="card" style="display:block;width:100%;text-align:left;font-family:inherit;margin-bottom:12px" onclick="nav('cardio', document.getElementById('bn-more'))">
         <div style="font-weight:600;font-size:15px;color:var(--t1)">🏃‍♂️ Cardio</div>
-      </div>
-      <div class="card" style="margin-bottom:12px" onclick="nav('deload', document.getElementById('bn-more'))">
+      </button>
+      <button type="button" class="card" style="display:block;width:100%;text-align:left;font-family:inherit;margin-bottom:12px" onclick="nav('deload', document.getElementById('bn-more'))">
         <div style="font-weight:600;font-size:15px;color:var(--t1)">🧘 Deload Protocol</div>
-      </div>
+      </button>
       <div class="card" style="margin-bottom:12px">
         <div style="font-weight:600;font-size:15px;color:var(--t1);margin-bottom:10px">Backup</div>
         <div style="display:flex;gap:8px">
@@ -2346,55 +2457,56 @@
     <!-- MOBILITY VIEW -->
     <div id="mobility" class="view">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-        <p class="slbl" style="margin:0">Routines</p>
+        <h2 class="slbl" style="margin:0">Routines</h2>
         <button class="btn" style="background:var(--card2);padding:6px 12px;font-size:12px"
-          onclick="document.getElementById('mobModal').style.display='flex'">+ Add</button>
+          onclick="openMobModal()">+ Add</button>
       </div>
       <div id="mobilityList"></div>
     </div>
 
     <!-- BOTTOM NAV -->
-    <div class="bottom-nav">
-      <button class="bn on" onclick="nav('workouts',this)" id="bn-workouts">
-        <div class="bn-icon">🏋️</div>
+    <nav class="bottom-nav" aria-label="Primary">
+      <button class="bn on" onclick="nav('workouts',this)" id="bn-workouts" aria-current="page" aria-label="Workouts">
+        <div class="bn-icon" aria-hidden="true">🏋️</div>
         <div>Workout</div>
       </button>
-      <button class="bn" onclick="nav('diet',this)">
-        <div class="bn-icon">🥩</div>
+      <button class="bn" onclick="nav('diet',this)" aria-label="Diet">
+        <div class="bn-icon" aria-hidden="true">🥩</div>
         <div>Diet</div>
       </button>
-      <button class="bn" onclick="nav('supps',this)">
-        <div class="bn-icon">💊</div>
+      <button class="bn" onclick="nav('supps',this)" aria-label="Supplements">
+        <div class="bn-icon" aria-hidden="true">💊</div>
         <div>Supps</div>
       </button>
-      <button class="bn" onclick="nav('tracking',this)">
-        <div class="bn-icon">📈</div>
+      <button class="bn" onclick="nav('tracking',this)" aria-label="Tracking">
+        <div class="bn-icon" aria-hidden="true">📈</div>
         <div>Track</div>
       </button>
-      <button class="bn" onclick="nav('more',this)" id="bn-more">
-        <div class="bn-icon">⋯</div>
+      <button class="bn" onclick="nav('more',this)" id="bn-more" aria-label="More">
+        <div class="bn-icon" aria-hidden="true">⋯</div>
         <div>More</div>
       </button>
-    </div>
+    </nav>
 
 
     <!-- MOBILITY MODAL -->
-    <div id="mobModal"
-      style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:2000;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(8px)">
+    <div id="mobModal" role="dialog" aria-modal="true" aria-labelledby="mobModalTitle" aria-hidden="true" inert tabindex="-1"
+      style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:2000;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(8px)"
+      onclick="if(event.target===this)closeMobModal()">
       <div class="card" style="width:100%;max-width:400px">
-        <div style="font-size:16px;font-weight:600;margin-bottom:16px">Add Mobility Routine</div>
+        <div id="mobModalTitle" style="font-size:16px;font-weight:600;margin-bottom:16px">Add Mobility Routine</div>
         <input type="text" id="mobNameInput" class="input" placeholder="Routine Name (e.g. Morning Flow)"
           style="margin-bottom:12px">
         <input type="text" id="mobNoteInput" class="input" placeholder="Notes/Duration" style="margin-bottom:16px">
         <div style="display:flex;gap:8px">
           <button class="btn" style="flex:1;background:var(--card2)"
-            onclick="document.getElementById('mobModal').style.display='none'">Cancel</button>
+            onclick="closeMobModal()">Cancel</button>
           <button class="btn" style="flex:1" onclick="addMob()">Save</button>
         </div>
       </div>
     </div>
 
-    <div class="workout-mode" id="workoutMode">
+    <div class="workout-mode" id="workoutMode" role="dialog" aria-modal="true" aria-labelledby="wmDayTitle" aria-hidden="true" inert tabindex="-1">
       <div class="wm-head">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
           <div>
@@ -2630,11 +2742,86 @@
         '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
       }[ch]));
     }
+    function onEnter(e, fn) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        fn();
+      }
+    }
 
     function escapeJsAttr(value) {
       return String(value ?? '')
         .replace(/\\/g, '\\\\')
         .replace(/'/g, '\\\'');
+    }
+
+    // ---- Accessible replacement for window.prompt / window.confirm ----
+    // Returns a Promise that resolves to an array of string values (for prompts)
+    // or true/false (for confirms). On cancel, prompts resolve to null.
+    function openDialog({ title = 'Prompt', sub = '', fields = [], okText = 'Save', cancelText = 'Cancel', confirmOnly = false }) {
+      return new Promise((resolve) => {
+        const overlay = document.getElementById('genericModal');
+        const titleEl = document.getElementById('genericModalTitle');
+        const subEl = document.getElementById('genericModalSub');
+        const fieldsEl = document.getElementById('genericModalFields');
+        const okBtn = document.getElementById('genericModalOk');
+        const cancelBtn = document.getElementById('genericModalCancel');
+        if (!overlay) { resolve(confirmOnly ? false : null); return; }
+
+        titleEl.textContent = title;
+        subEl.textContent = sub || '';
+        subEl.style.display = sub ? '' : 'none';
+        okBtn.textContent = okText;
+        cancelBtn.textContent = cancelText;
+
+        fieldsEl.innerHTML = '';
+        if (!confirmOnly) {
+          fields.forEach((f, i) => {
+            const wrap = document.createElement('div');
+            const inputId = `genericField_${i}`;
+            wrap.innerHTML = `
+              <label for="${inputId}" style="display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);margin-bottom:6px;font-weight:600">${escapeHTML(f.label || '')}</label>
+              <input id="${inputId}" class="input" type="${f.type || 'text'}" ${f.inputmode ? `inputmode="${f.inputmode}"` : ''} value="${escapeHTML(f.value ?? '')}" placeholder="${escapeHTML(f.placeholder || '')}" autocomplete="off">`;
+            fieldsEl.appendChild(wrap);
+          });
+        }
+
+        const prevActive = document.activeElement;
+        overlay.classList.add('open');
+        overlay.setAttribute('aria-hidden', 'false');
+        overlay.removeAttribute('inert');
+        setTimeout(() => {
+          const firstInput = fieldsEl.querySelector('input, textarea');
+          (firstInput || okBtn).focus();
+        }, 60);
+
+        const cleanup = (result) => {
+          overlay.classList.remove('open');
+          overlay.setAttribute('aria-hidden', 'true');
+          overlay.setAttribute('inert', '');
+          okBtn.onclick = cancelBtn.onclick = overlay.onclick = null;
+          document.removeEventListener('keydown', onKey);
+          if (prevActive && prevActive.focus) setTimeout(() => prevActive.focus(), 0);
+          resolve(result);
+        };
+        const getValues = () => [...fieldsEl.querySelectorAll('input, textarea')].map(el => el.value);
+        const onKey = (e) => {
+          if (e.key === 'Escape') cleanup(confirmOnly ? false : null);
+          if (e.key === 'Enter' && !(e.target && e.target.tagName === 'TEXTAREA')) {
+            e.preventDefault();
+            cleanup(confirmOnly ? true : getValues());
+          }
+        };
+
+        okBtn.onclick = () => cleanup(confirmOnly ? true : getValues());
+        cancelBtn.onclick = () => cleanup(confirmOnly ? false : null);
+        overlay.onclick = (e) => { if (e.target === overlay) cleanup(confirmOnly ? false : null); };
+        document.addEventListener('keydown', onKey);
+      });
+    }
+
+    async function askConfirm(message, { title = 'Confirm', okText = 'Confirm', cancelText = 'Cancel' } = {}) {
+      return openDialog({ title, sub: message, confirmOnly: true, okText, cancelText });
     }
 
     function vibrate(pattern = 50) {
@@ -2713,12 +2900,12 @@
 
     function openLibrary(dayId) {
       activeDayForLib = dayId;
-      document.getElementById('libModal').style.display = 'flex';
+      openLibModal(dayId);
       setLibFilter('all');
     }
 
     function closeLibrary() {
-      document.getElementById('libModal').style.display = 'none';
+      closeLibModal();
       activeDayForLib = null;
     }
 
@@ -2751,10 +2938,10 @@
           .filter((tag, idx, arr) => arr.indexOf(tag) === idx)
           .map(tag => `<span class="tag" style="background:var(--bg2)">${escapeHTML(tag)}</span>`).join('');
         list.innerHTML += `
-        <div class="card" style="margin-bottom:8px;padding:12px;cursor:pointer" onclick="selectLibExercise('${escapeJsAttr(ex.name)}')">
+        <button type="button" class="card" style="display:block;width:100%;text-align:left;font-family:inherit;margin-bottom:8px;padding:12px;cursor:pointer" onclick="selectLibExercise('${escapeJsAttr(ex.name)}')">
           <div style="font-weight:600;font-size:15px;color:var(--t1)">${escapeHTML(ex.name)}</div>
           <div style="display:flex;gap:4px;margin-top:6px;flex-wrap:wrap">${t}</div>
-        </div>`;
+        </button>`;
       });
     }
 
@@ -2840,9 +3027,9 @@
           <input type="number" inputmode="decimal" class="logger-input" placeholder="-" value="${escapeHTML(s.w)}" onchange="updateSet('${escapeJsAttr(ex.name)}', ${sIdx}, 'w', this.value)">
           <input type="number" inputmode="numeric" class="logger-input" placeholder="-" value="${escapeHTML(s.r)}" onchange="updateSet('${escapeJsAttr(ex.name)}', ${sIdx}, 'r', this.value)">
           <div style="flex:1.5; display:flex; align-items:center; padding:0 4px">
-            <input type="range" min="1" max="10" class="rpe" value="${s.rpe || 7}" onchange="updateSet('${escapeJsAttr(ex.name)}', ${sIdx}, 'rpe', this.value)">
+            <input type="range" min="1" max="10" class="rpe" value="${s.rpe || 7}" aria-label="Rate of perceived exertion, set ${sIdx + 1}" onchange="updateSet('${escapeJsAttr(ex.name)}', ${sIdx}, 'rpe', this.value)">
           </div>
-          <div class="logger-btn ${s.done ? 'done' : ''}" onclick="toggleSetDone('${dayId}', ${exIdx}, '${escapeJsAttr(ex.name)}', ${sIdx}, this)">✓</div>
+          <button type="button" class="logger-btn ${s.done ? 'done' : ''}" aria-label="Mark set ${sIdx + 1} as ${s.done ? 'incomplete' : 'complete'}" onclick="toggleSetDone('${dayId}', ${exIdx}, '${escapeJsAttr(ex.name)}', ${sIdx}, this)">✓</button>
         </div>
         <div style="display:flex;gap:8px;margin:2px 0 8px 28px">
           <button class="edit-btn" style="padding:6px 10px; ${s.drop ? 'background:var(--acc2);color:white' : ''}" onclick="event.stopPropagation(); toggleDropSet('${escapeJsAttr(ex.name)}',${sIdx},'${dayId}',${exIdx})">${s.drop ? 'Drop Set' : 'Add Drop'}</button>
@@ -3097,12 +3284,19 @@
       wmDayId = dayId;
       wmExIdx = 0;
       requestWakeLock();
-      document.getElementById('workoutMode').classList.add('open');
+      const m = document.getElementById('workoutMode');
+      m.classList.add('open');
+      m.removeAttribute('aria-hidden');
+      m.removeAttribute('inert');
       renderWorkoutMode();
+      setTimeout(() => m.focus(), 50);
     }
 
     function closeWorkoutMode() {
-      document.getElementById('workoutMode').classList.remove('open');
+      const m = document.getElementById('workoutMode');
+      m.classList.remove('open');
+      m.setAttribute('aria-hidden', 'true');
+      m.setAttribute('inert', '');
       releaseWakeLock();
     }
 
@@ -3351,7 +3545,7 @@
         let exHTML = '';
         exList.forEach((ex, i) => {
           const tags = (ex.tags || []).map(t => `<span class="tag ${escapeHTML(t)}">${escapeHTML(t)}</span>`).join('');
-          exHTML += `<div class="ex-row" id="exrow_${d.id}_${i}" onclick="toggleLogger('${d.id}', ${i})">
+          exHTML += `<div class="ex-row" id="exrow_${d.id}_${i}" onclick="toggleLogger('${d.id}', ${i})" role="button" tabindex="0" onkeydown="onEnter(event, () => toggleLogger('${d.id}', ${i}))">
         <div class="ex-num">${i + 1}</div>
         <div class="ex-content">
           <div class="ex-name">${escapeHTML(ex.name)}</div>
@@ -3359,7 +3553,7 @@
           ${tags ? `<div class="ex-tags">${tags}</div>` : ''}
         </div>
         <button class="edit-btn" style="flex:0;padding:6px 9px" onclick="event.stopPropagation(); editExercise('${d.id}',${i})">Edit</button>
-        <div class="ex-del" onclick="event.stopPropagation(); deleteEx('${d.id}',${i})">×</div>
+        <button type="button" class="ex-del" aria-label="Delete ${escapeHTML(ex.name)}" onclick="event.stopPropagation(); deleteEx('${d.id}',${i})">×</button>
       </div>
       <div class="logger-wrap" id="logger_${d.id}_${i}"></div>`;
         });
@@ -3369,8 +3563,8 @@
           : `${d.warmup ? `<div class="warmup-bar">${d.warmup}</div>` : ''}
          <ul class="ex-list" id="exlist_${d.id}">${exHTML}</ul>
          <div class="edit-toolbar" id="toolbar_${d.id}" style="display:none">
-           <div class="edit-btn" onclick="openLibrary('${d.id}')">+ Add exercise</div>
-           <div class="edit-btn primary" onclick="stopEdit('${d.id}')">Done</div>
+           <button type="button" class="edit-btn" onclick="openLibrary('${d.id}')">+ Add exercise</button>
+           <button type="button" class="edit-btn primary" onclick="stopEdit('${d.id}')">Done</button>
          </div>
          <div class="add-ex-form" id="addform_${d.id}" style="display:none">
            <input type="text" id="addname_${d.id}" placeholder="Exercise name (e.g. Cable Curl)">
@@ -3378,20 +3572,20 @@
              <input type="text" id="adddetail_${d.id}" placeholder="Sets × reps · rest (e.g. 3 × 12 · 60s)">
            </div>
            <div style="display:flex;gap:8px;margin-top:8px">
-             <div class="edit-btn" onclick="hideAddForm('${d.id}')">Cancel</div>
-             <div class="edit-btn primary" onclick="addExercise('${d.id}')">Add</div>
+             <button type="button" class="edit-btn" onclick="hideAddForm('${d.id}')">Cancel</button>
+             <button type="button" class="edit-btn primary" onclick="addExercise('${d.id}')">Add</button>
            </div>
          </div>`;
 
         card.innerHTML = `
-      <div class="day-head" onclick="toggleDay('${d.id}')">
+      <div class="day-head" onclick="toggleDay('${d.id}')" role="button" tabindex="0" onkeydown="onEnter(event, () => toggleDay('${d.id}'))">
         <div class="day-badge ${d.type}">${dayIcon(d)}</div>
         <div class="day-info">
           <div class="day-title">${d.title}</div>
           <div class="day-sub">${d.sub}</div>
         </div>
         <div class="day-right">
-          ${!d.isRest ? `<div style="font-size:11px;color:var(--t3);padding:5px 10px;border-radius:8px;border:0.5px solid var(--b2);background:var(--bg3);cursor:pointer" onclick="startEdit(event,'${d.id}')">Edit</div>` : ''}
+          ${!d.isRest ? `<button type="button" style="font-size:11px;color:var(--t3);padding:5px 10px;border-radius:8px;border:0.5px solid var(--b2);background:var(--bg3);cursor:pointer;font-family:inherit;font-weight:500" onclick="startEdit(event,'${d.id}')">Edit</button>` : ''}
           <div class="day-arr" id="darr_${d.id}">▾</div>
         </div>
       </div>
@@ -3450,30 +3644,44 @@
       rebuildExList(dayId);
     }
 
-    function editExercise(dayId, idx) {
+    async function editExercise(dayId, idx) {
       const ex = exercises[dayId]?.[idx];
       if (!ex) return;
-      const name = prompt('Exercise name', ex.name);
-      if (!name) return;
-      const detail = prompt('Sets/reps/rest', ex.detail || '') || '';
-      const notes = prompt('Notes', ex.notes || '') || '';
-      ex.name = name.trim();
-      ex.detail = detail.trim();
-      ex.notes = notes.trim();
+      const values = await openDialog({
+        title: 'Edit exercise',
+        fields: [
+          { label: 'Name', value: ex.name, placeholder: 'e.g. Bench Press' },
+          { label: 'Sets / reps / rest', value: ex.detail || '', placeholder: '3 × 10 · 60s' },
+          { label: 'Notes', value: ex.notes || '', placeholder: 'Form cues, mind-muscle, etc.' },
+        ],
+      });
+      if (!values || !values[0].trim()) return;
+      ex.name = values[0].trim();
+      ex.detail = (values[1] || '').trim();
+      ex.notes = (values[2] || '').trim();
       saveExercises();
       rebuildExList(dayId);
       showToast('Exercise updated');
     }
 
-    function deleteEx(dayId, idx) {
+    async function deleteEx(dayId, idx) {
+      const ex = exercises[dayId]?.[idx];
+      if (!ex) return;
+      const ok = await askConfirm(`Remove “${ex.name}” from this day?`, { title: 'Delete exercise', okText: 'Delete' });
+      if (!ok) return;
       exercises[dayId].splice(idx, 1);
       saveExercises();
       rebuildExList(dayId);
     }
 
-    function addCustomDay() {
-      const title = prompt('Day name', 'Custom Day');
-      if (!title) return;
+    async function addCustomDay() {
+      const values = await openDialog({
+        title: 'Add custom day',
+        sub: 'Creates an extra day card you can fill with exercises.',
+        fields: [{ label: 'Day name', value: 'Custom Day', placeholder: 'Arms Day, HIIT, etc.' }],
+      });
+      if (!values || !values[0].trim()) return;
+      const title = values[0].trim();
       const id = 'custom_' + Date.now();
       DAYS.push({
         id,
@@ -3514,7 +3722,7 @@
         ${tags ? `<div class="ex-tags">${tags}</div>` : ''}
       </div>
       <button class="edit-btn" style="flex:0;padding:6px 9px" onclick="event.stopPropagation(); editExercise('${dayId}',${i})">Edit</button>
-      <div class="ex-del" onclick="event.stopPropagation(); deleteEx('${dayId}',${i})">×</div>`;
+      <button type="button" class="ex-del" aria-label="Delete ${escapeHTML(ex.name)}" onclick="event.stopPropagation(); deleteEx('${dayId}',${i})">×</button>`;
         list.appendChild(row);
         const logger = document.createElement('div');
         logger.className = 'logger-wrap';
@@ -3530,13 +3738,20 @@
 
     // ── WEIGHT ──
     function openWeightModal() {
+      const m = document.getElementById('weightModal');
       document.getElementById('weightInput').value = currentWeight;
-      document.getElementById('weightModal').classList.add('open');
+      m.classList.add('open');
+      m.removeAttribute('aria-hidden');
+      m.removeAttribute('inert');
       setTimeout(() => document.getElementById('weightInput').focus(), 300);
     }
     function closeWeightModal(e) {
-      if (!e || e.target === document.getElementById('weightModal'))
-        document.getElementById('weightModal').classList.remove('open');
+      if (!e || e.target === document.getElementById('weightModal') || e.target.closest?.('.modal-cancel')) {
+        const m = document.getElementById('weightModal');
+        m.classList.remove('open');
+        m.setAttribute('aria-hidden', 'true');
+        m.setAttribute('inert', '');
+      }
     }
     function saveWeight() {
       const val = parseFloat(document.getElementById('weightInput').value);
@@ -3553,6 +3768,8 @@
       document.getElementById('weightDisplay').textContent = val + ' kg';
       document.getElementById('heroSub').textContent = val + ' kg · 6 ft · 23 yr · Aggressive fat loss';
       document.getElementById('weightModal').classList.remove('open');
+      document.getElementById('weightModal').setAttribute('aria-hidden', 'true');
+      document.getElementById('weightModal').setAttribute('inert', '');
       renderWeightChart();
       updateBodyRings();
     }
@@ -3768,13 +3985,21 @@
       if (el('goalEta')) el('goalEta').textContent = eta;
     }
 
-    function editWeightGoal() {
+    async function editWeightGoal() {
       const goals = getBodyGoals();
       const cfg = goals.Weight || { unit: 'kg', start: 102, goal: 85, color: 'var(--sky)' };
-      const goal = parseFloat(prompt('Target weight (kg)', cfg.goal));
-      if (isNaN(goal)) return;
-      const start = parseFloat(prompt('Starting weight (kg)', cfg.start));
-      if (isNaN(start)) return;
+      const values = await openDialog({
+        title: 'Weight goal',
+        sub: 'Set your starting and target weight.',
+        fields: [
+          { label: 'Target weight (kg)', value: cfg.goal, type: 'number', inputmode: 'decimal' },
+          { label: 'Starting weight (kg)', value: cfg.start, type: 'number', inputmode: 'decimal' },
+        ],
+      });
+      if (!values) return;
+      const goal = parseFloat(values[0]);
+      const start = parseFloat(values[1]);
+      if (isNaN(goal) || isNaN(start)) return;
       cfg.goal = goal;
       cfg.start = start;
       goals.Weight = cfg;
@@ -3933,11 +4158,19 @@
       }).join('');
     }
 
-    function editBodyGoal(name) {
+    async function editBodyGoal(name) {
       const goals = getBodyGoals();
       const cfg = goals[name];
-      const start = parseFloat(prompt(`${name} start`, cfg.start));
-      const goal = parseFloat(prompt(`${name} goal`, cfg.goal));
+      const values = await openDialog({
+        title: `${name} goal`,
+        fields: [
+          { label: 'Start value', value: cfg.start, type: 'number', inputmode: 'decimal' },
+          { label: 'Goal value', value: cfg.goal, type: 'number', inputmode: 'decimal' },
+        ],
+      });
+      if (!values) return;
+      const start = parseFloat(values[0]);
+      const goal = parseFloat(values[1]);
       if (isNaN(start) || isNaN(goal)) return;
       cfg.start = start;
       cfg.goal = goal;
@@ -4074,8 +4307,21 @@
       renderSupps();
       renderSuppHeatmap();
     }
-    function showAddSuppForm() { document.getElementById('suppModal').style.display = 'flex'; }
-    function hideSuppForm() { document.getElementById('suppModal').style.display = 'none'; }
+    function openSuppModal() {
+      const m = document.getElementById('suppModal');
+      m.style.display = 'flex';
+      m.removeAttribute('aria-hidden');
+      m.removeAttribute('inert');
+      setTimeout(() => m.querySelector('input')?.focus(), 50);
+    }
+    function closeSuppModal() {
+      const m = document.getElementById('suppModal');
+      m.style.display = 'none';
+      m.setAttribute('aria-hidden', 'true');
+      m.setAttribute('inert', '');
+    }
+    function showAddSuppForm() { openSuppModal(); }
+    function hideSuppForm() { closeSuppModal(); }
     function addSupplement() {
       addSupp();
     }
@@ -4103,7 +4349,7 @@
       }
       saveSupps(supps);
       ['suppNameInput', 'suppDoseInput', 'suppWhyInput'].forEach(id => document.getElementById(id).value = '');
-      document.getElementById('suppModal').style.display = 'none';
+      document.getElementById('suppModal').style.display = 'none'; closeSuppModal();
       editingSuppId = null;
       renderSupps();
       showToast('Supplement saved');
@@ -4116,12 +4362,14 @@
       document.getElementById('suppNameInput').value = s.name;
       document.getElementById('suppDoseInput').value = s.dose;
       document.getElementById('suppWhyInput').value = s.why;
-      document.getElementById('suppModal').style.display = 'flex';
+      openSuppModal();
     }
-    function deleteSupplement(id) {
-      if (!confirm('Delete this supplement?')) return;
-      const supps = loadSupps().filter(s => s.id !== id);
-      saveSupps(supps);
+    async function deleteSupplement(id) {
+      const supps = loadSupps();
+      const supp = supps.find(s => s.id === id);
+      const ok = await askConfirm(supp ? `Remove “${supp.name}” from your stack?` : 'Delete this supplement?', { title: 'Delete supplement', okText: 'Delete' });
+      if (!ok) return;
+      saveSupps(supps.filter(s => s.id !== id));
       renderSupps();
     }
 
@@ -4187,6 +4435,8 @@
       if (!toast) {
         toast = document.createElement('div');
         toast.id = 'appToast';
+        toast.setAttribute('role', 'status');
+        toast.setAttribute('aria-live', 'polite');
         toast.style.cssText = 'position:fixed;top:calc(16px + env(safe-area-inset-top,20px));left:50%;transform:translateX(-50%) translateY(-100px);background:var(--acc);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:700;z-index:9999;box-shadow:0 8px 24px rgba(123,111,255,0.3);transition:transform .4s cubic-bezier(.18,.89,.32,1.28);white-space:nowrap';
         document.body.appendChild(toast);
       }
@@ -4485,13 +4735,20 @@
       host.innerHTML = html;
     }
 
-    function editDietMeal(dayIdx, mealIdx) {
+    async function editDietMeal(dayIdx, mealIdx) {
       const meal = dietPlans[dayIdx].meals[mealIdx];
-      const name = prompt('Meal', meal.name);
-      if (!name) return;
-      meal.name = name;
-      meal.note = prompt('Note', meal.note) || meal.note;
-      meal.prot = prompt('Protein', meal.prot) || meal.prot;
+      const values = await openDialog({
+        title: 'Edit meal',
+        fields: [
+          { label: 'Meal', value: meal.name, placeholder: 'e.g. Grilled chicken + rice' },
+          { label: 'Note', value: meal.note, placeholder: 'Prep tip, alt ingredients' },
+          { label: 'Protein (g)', value: meal.prot, type: 'text', inputmode: 'decimal' },
+        ],
+      });
+      if (!values || !values[0].trim()) return;
+      meal.name = values[0].trim();
+      meal.note = (values[1] || meal.note).trim();
+      meal.prot = (values[2] || meal.prot).trim();
       localStorage.setItem(SK_DIET_PLAN, JSON.stringify(dietPlans[0]));
       renderDietContent();
       showToast('Meal updated');
@@ -4538,9 +4795,9 @@
             <div style="font-size:12px; color:var(--t2)">${m.note}</div>
           </div>
           <div style="display:flex; gap:12px; align-items:center;">
-            <div onclick="toggleMob('${m.id}')" style="width:24px; height:24px; border-radius:50%; border:2px solid ${m.checked ? 'var(--grn)' : 'var(--b2)'}; background: ${m.checked ? 'var(--grn)' : 'transparent'}; display:flex; align-items:center; justify-content:center; cursor:pointer;">
-              ${m.checked ? '<span style="color:#000; font-size:12px; font-weight:bold">✓</span>' : ''}
-            </div>
+            <button type="button" aria-label="Toggle completed" onclick="toggleMob('${m.id}')" style="width:24px; height:24px; border-radius:50%; border:2px solid ${m.checked ? 'var(--grn)' : 'var(--b2)'}; background: ${m.checked ? 'var(--grn)' : 'transparent'}; display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0">
+              ${m.checked ? '<span style="color:#000; font-size:12px; font-weight:bold" aria-hidden="true">✓</span>' : ''}
+            </button>
             <button onclick="editMob('${m.id}')" style="background:none; border:none; color:var(--sky); font-size:13px; cursor:pointer">Edit</button>
             <button onclick="delMob('${m.id}')" style="background:none; border:none; color:var(--red); font-size:16px; cursor:pointer">×</button>
           </div>
@@ -4559,11 +4816,13 @@
       }
     }
 
-    function delMob(id) {
-      if (confirm('Delete routine?')) {
-        mobilityRoutines = mobilityRoutines.filter(x => x.id !== id);
-        renderMobility();
-      }
+    async function delMob(id) {
+      const routine = mobilityRoutines.find(x => x.id === id);
+      const ok = await askConfirm(routine ? `Delete “${routine.name}”?` : 'Delete routine?', { title: 'Delete routine', okText: 'Delete' });
+      if (!ok) return;
+      mobilityRoutines = mobilityRoutines.filter(x => x.id !== id);
+      saveMobility && saveMobility();
+      renderMobility();
     }
 
     function addMob() {
@@ -4581,7 +4840,7 @@
       }
       document.getElementById('mobNameInput').value = '';
       document.getElementById('mobNoteInput').value = '';
-      document.getElementById('mobModal').style.display = 'none';
+      document.getElementById('mobModal').style.display = 'none'; closeMobModal();
       editingMobId = null;
       renderMobility();
     }
@@ -4592,18 +4851,60 @@
       editingMobId = id;
       document.getElementById('mobNameInput').value = m.name;
       document.getElementById('mobNoteInput').value = m.note;
-      document.getElementById('mobModal').style.display = 'flex';
+      openMobModal();
     }
 
+
+    function openMobModal() {
+      const m = document.getElementById('mobModal');
+      m.style.display = 'flex';
+      m.removeAttribute('aria-hidden');
+      m.removeAttribute('inert');
+      setTimeout(() => m.querySelector('input')?.focus(), 50);
+    }
+    function closeMobModal() {
+      const m = document.getElementById('mobModal');
+      m.style.display = 'none';
+      m.setAttribute('aria-hidden', 'true');
+      m.setAttribute('inert', '');
+    }
+    function openLibModal(dayId) {
+      const m = document.getElementById('libModal');
+      m.style.display = 'flex';
+      m.removeAttribute('aria-hidden');
+      m.removeAttribute('inert');
+      setTimeout(() => document.getElementById('libSearch')?.focus(), 50);
+    }
+    function closeLibModal() {
+      const m = document.getElementById('libModal');
+      m.style.display = 'none';
+      m.setAttribute('aria-hidden', 'true');
+      m.setAttribute('inert', '');
+    }
+    // Global ESC key handler — dismisses any open dialog
+    document.addEventListener('keydown', function(e) {
+      if (e.key !== 'Escape') return;
+      if (document.getElementById('suppModal')?.style.display === 'flex') { closeSuppModal(); return; }
+      if (document.getElementById('mobModal')?.style.display === 'flex') { closeMobModal(); return; }
+      if (document.getElementById('libModal')?.style.display === 'flex') { closeLibrary(); return; }
+      if (document.getElementById('workoutMode')?.classList.contains('open')) { closeWorkoutMode(); return; }
+      if (document.getElementById('weightModal')?.classList.contains('open')) { closeWeightModal(); return; }
+    });
 
     // ── NAV ──
     function nav(id, btn) {
       const pane = document.getElementById(id);
       if (!pane) return;
       document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-      document.querySelectorAll('.bn').forEach(b => b.classList.remove('on'));
+      document.querySelectorAll('.bn').forEach(b => {
+        b.classList.remove('on');
+        b.removeAttribute('aria-current');
+      });
       pane.classList.add('active');
-      if (btn) btn.classList.add('on');
+      if (btn) {
+        btn.classList.add('on');
+        btn.setAttribute('aria-current', 'page');
+      }
       const hero = document.getElementById('homeHero');
       if (hero) hero.style.display = id === 'workouts' ? 'block' : 'none';
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -4650,14 +4951,15 @@
   </script>
 
   <!-- EXERCISE LIBRARY MODAL -->
-  <div id="libModal"
+  <div id="libModal" role="dialog" aria-modal="true" aria-labelledby="libModalTitle" aria-hidden="true" inert
     style="display:none;position:fixed;inset:0;background:var(--bg);z-index:2100;flex-direction:column;animation:slideIn 0.3s cubic-bezier(.32,1,.28,1)">
     <div
       style="padding:env(safe-area-inset-top,20px) 16px 12px;background:var(--card);border-bottom:1px solid var(--b2);display:flex;align-items:center;gap:12px">
       <button class="btn" style="width:36px;height:36px;padding:0;background:var(--bg2)"
-        onclick="closeLibrary()">✕</button>
+        aria-label="Close exercise library" onclick="closeLibrary()">✕</button>
       <div style="flex:1">
-        <input type="text" id="libSearch" class="input" placeholder="Search exercises..." style="width:100%"
+        <span id="libModalTitle" class="sr-only">Exercise Library</span>
+        <input type="text" id="libSearch" class="input" placeholder="Search exercises..." aria-label="Search exercises" style="width:100%"
           oninput="filterLibrary()">
       </div>
     </div>
