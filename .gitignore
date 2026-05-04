@@ -45,4 +45,5 @@ coverage/
 playwright-report/
 test-results/
 .nyc_output/
-docs
+# --- Documentation ---
+docs/
