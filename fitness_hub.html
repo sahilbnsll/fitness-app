@@ -1781,7 +1781,7 @@
       display: none;
       align-items: center;
       gap: 12px;
-      z-index: 1200;
+      z-index: 2200;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
@@ -3110,6 +3110,7 @@
       }
       saveLogs();
       renderLogger(dayId, exIdx);
+      if (document.getElementById('workoutMode')?.classList.contains('open')) renderWorkoutMode();
     }
 
     function duplicateSet(dayId, exIdx, exName, sIdx) {
@@ -3119,6 +3120,7 @@
       sets.splice(sIdx + 1, 0, { ...sets[sIdx], done: false });
       saveLogs();
       renderLogger(dayId, exIdx);
+      if (document.getElementById('workoutMode')?.classList.contains('open')) renderWorkoutMode();
     }
 
     function saveExerciseNote(dayId, exIdx, note) {
@@ -3148,6 +3150,7 @@
       sets.splice(sIdx, 1);
       saveLogs();
       renderLogger(dayId, exIdx);
+      if (document.getElementById('workoutMode')?.classList.contains('open')) renderWorkoutMode();
       renderWorkoutInsights();
     }
 
@@ -3206,6 +3209,7 @@
       rows.push({ w: '', r: '', rpe: '', done: false, drop: false });
       saveLogs();
       renderLogger(dayId, exIdx);
+      if (document.getElementById('workoutMode')?.classList.contains('open')) renderWorkoutMode();
       setTimeout(() => {
         const wrap = document.getElementById(`logger_${dayId}_${exIdx}`);
         const inputs = wrap ? wrap.querySelectorAll('.logger-input') : [];
@@ -3233,7 +3237,10 @@
         }
         const m = Math.floor(restTime / 60);
         const s = restTime % 60;
-        tVal.textContent = `${m}:${s.toString().padStart(2, '0')}`;
+        const timeStr = `${m}:${s.toString().padStart(2, '0')}`;
+        tVal.textContent = timeStr;
+        const wmTimer = document.getElementById('wmTimer');
+        if (wmTimer) wmTimer.textContent = `Resting: ${timeStr}`;
         restTime--;
       }
       update();
@@ -3316,20 +3323,39 @@
         <div class="logger-chip">Last time: ${last && last.w && last.r ? `${last.w}kg × ${last.r}` : 'none'}</div>
         <div class="logger-chip">Suggestion: ${next ? `${next}kg` : 'log first'}</div>`;
       const today = getTodayKey();
-      if (!workoutLogs[today]) workoutLogs[today] = {};
-      if (!workoutLogs[today][ex.name]) workoutLogs[today][ex.name] = [{ w: '', r: '', rpe: '', done: false, drop: false }];
-      document.getElementById('wmSets').innerHTML = workoutLogs[today][ex.name].map((s, idx) => `
-        <div class="card" style="margin-bottom:8px">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div style="font-weight:700">Set ${idx + 1}</div>
-            <button class="btn" style="padding:8px 12px;background:${s.done ? 'var(--grn)' : 'var(--card2)'};color:${s.done ? '#04110c' : 'var(--t1)'}" onclick="toggleSetDone('${wmDayId}',${wmExIdx},'${escapeJsAttr(ex.name)}',${idx})">${s.done ? 'Done' : 'Complete'}</button>
+      const sets = ensureWorkoutLogRows(today, ex.name, 0);
+
+      document.getElementById('wmSets').innerHTML = sets.map((s, idx) => `
+        <div class="card ${s.drop ? 'is-drop' : ''}" style="margin-bottom:12px; padding:12px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+            <div style="font-weight:700;font-size:15px">Set ${idx + 1} ${s.drop ? '<span style="color:var(--acc2);font-size:11px;margin-left:4px">DROP</span>' : ''}</div>
+            <button class="btn" style="padding:8px 16px;background:${s.done ? 'var(--grn)' : 'var(--card2)'};color:${s.done ? '#04110c' : 'var(--t1)'};font-size:13px" 
+              onclick="toggleSetDone('${wmDayId}',${wmExIdx},'${escapeJsAttr(ex.name)}',${idx})">${s.done ? 'Done ✓' : 'Complete'}</button>
           </div>
-          <div class="logger-meta">
-            <div class="logger-chip">${s.w || '-'} kg</div>
-            <div class="logger-chip">${s.r || '-'} reps · RPE ${s.rpe || '-'}</div>
+          <div style="display:flex;gap:8px;margin-bottom:8px">
+            <input type="number" inputmode="decimal" class="logger-input" placeholder="Weight" value="${escapeHTML(s.w)}" 
+              onchange="updateSet('${escapeJsAttr(ex.name)}', ${idx}, 'w', this.value)">
+            <input type="number" inputmode="numeric" class="logger-input" placeholder="Reps" value="${escapeHTML(s.r)}" 
+              onchange="updateSet('${escapeJsAttr(ex.name)}', ${idx}, 'r', this.value)">
+            <div style="flex:1.5; display:flex; align-items:center; padding:0 4px; background:var(--bg2); border:1px solid var(--b2); border-radius:8px">
+              <input type="range" min="1" max="10" class="rpe" value="${s.rpe || 7}" 
+                onchange="updateSet('${escapeJsAttr(ex.name)}', ${idx}, 'rpe', this.value)">
+            </div>
           </div>
-        </div>`).join('');
-      document.getElementById('wmTimer').textContent = document.getElementById('restTimerVal').textContent || 'Timer ready';
+          <div style="display:flex;gap:8px">
+            <button class="edit-btn" style="flex:1;padding:8px; ${s.drop ? 'background:var(--acc2);color:white' : ''}" 
+              onclick="event.stopPropagation(); toggleDropSet('${escapeJsAttr(ex.name)}',${idx},'${wmDayId}',${wmExIdx})">${s.drop ? 'Drop Set' : 'Add Drop'}</button>
+            <button class="edit-btn" style="flex:1;padding:8px" 
+              onclick="event.stopPropagation(); duplicateSet('${wmDayId}',${wmExIdx},'${escapeJsAttr(ex.name)}',${idx})">Copy</button>
+            <button class="edit-btn" style="flex:1;padding:8px; color:var(--red); border-color:rgba(255,107,107,0.2)" 
+              onclick="event.stopPropagation(); removeSet('${wmDayId}',${wmExIdx},'${escapeJsAttr(ex.name)}',${idx})">Delete</button>
+          </div>
+        </div>`).join('') + `
+        <button class="btn" style="width:100%;background:transparent;border:1.5px dashed var(--b2);color:var(--t2);padding:12px;margin-top:4px" 
+          onclick="addSet('${wmDayId}', ${wmExIdx}, '${escapeJsAttr(ex.name)}')">+ Add Set</button>`;
+      
+      const tVal = document.getElementById('restTimerVal').textContent;
+      document.getElementById('wmTimer').textContent = tVal && tVal !== '0:00' ? `Resting: ${tVal}` : 'Timer ready';
     }
 
     function prevWorkoutExercise() {
