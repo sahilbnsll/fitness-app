@@ -108,7 +108,29 @@
     }
 
     .btn:active {
-      transform: scale(.96)
+      transform: scale(.97);
+      opacity: 0.9;
+    }
+    
+    .edit-btn {
+      background: var(--card2);
+      border: .5px solid var(--b2);
+      border-radius: 8px;
+      color: var(--t2);
+      padding: 8px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      min-height: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .edit-btn:active {
+      background: var(--b3);
+      color: var(--t1);
     }
 
     .input {
@@ -117,9 +139,10 @@
       border: 1px solid var(--b2);
       border-radius: 12px;
       color: var(--t1);
-      font-size: 14px;
+      font-size: 16px; /* Prevents iOS auto-zoom */
       outline: none;
-      padding: 12px 14px
+      padding: 12px 14px;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
 
     .input:focus {
@@ -1543,41 +1566,63 @@
 
     .bottom-nav {
       position: fixed;
-      bottom: 0;
-      left: 50%;
-      right: auto;
-      transform: translateX(-50%);
-      width: min(100%, 760px);
-      background: rgba(10, 10, 10, 0.85);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-top: 1px solid var(--b2);
+      bottom: 12px;
+      left: 12px;
+      right: 12px;
+      width: calc(100% - 24px);
+      max-width: 736px;
+      background: rgba(20, 20, 30, 0.8);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--b2);
+      border-radius: 24px;
       display: flex;
       justify-content: space-around;
-      padding: 10px 10px calc(10px + env(safe-area-inset-bottom, 20px));
+      padding: 10px 6px calc(10px + env(safe-area-inset-bottom, 0px));
       z-index: 1000;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      margin: 0 auto;
     }
 
     .bn {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
       color: var(--t3);
       background: none;
       border: none;
       font-size: 10px;
-      font-weight: 500;
-      transition: color 0.2s;
+      font-weight: 600;
+      transition: all 0.2s;
       flex: 1;
-      padding: 4px 0;
+      padding: 6px 0;
+      position: relative;
     }
 
     .bn.on {
-      color: var(--t1);
+      color: var(--acc2);
+    }
+
+    .bn.on::after {
+      content: '';
+      position: absolute;
+      bottom: 2px;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--acc);
+      box-shadow: 0 0 8px var(--acc);
     }
 
     .bn-icon {
+      font-size: 20px;
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    
+    .bn.on .bn-icon {
+      transform: translateY(-2px) scale(1.1);
+    }
       font-size: 22px;
       margin-bottom: 2px;
       filter: grayscale(100%) opacity(0.5);
@@ -1603,6 +1648,20 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      padding: 4px 0;
+      transition: background 0.2s;
+    }
+
+    .logger-row.is-drop {
+      background: rgba(168, 85, 247, 0.08);
+      border-radius: 10px;
+      border: 1px dashed rgba(168, 85, 247, 0.3);
+      padding: 6px 4px;
+      margin: 2px -4px;
+    }
+
+    .logger-row.is-drop .logger-num {
+      color: var(--acc2);
     }
 
     .logger-num {
@@ -1753,7 +1812,32 @@
     }
 
     .rpe {
-      width: 92px
+      width: 100%;
+      min-width: 80px;
+      -webkit-appearance: none;
+      background: transparent;
+      height: 24px;
+    }
+
+    .rpe::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 4px;
+      cursor: pointer;
+      background: var(--bg3);
+      border-radius: 2px;
+      border: 0.5px solid var(--b2);
+    }
+
+    .rpe::-webkit-slider-thumb {
+      height: 16px;
+      width: 16px;
+      border-radius: 50%;
+      background: var(--acc);
+      cursor: pointer;
+      -webkit-appearance: none;
+      margin-top: -6px;
+      box-shadow: 0 0 8px rgba(123, 111, 255, 0.3);
+      border: 1.5px solid var(--bg2);
     }
 
     .workout-mode {
@@ -1771,9 +1855,11 @@
 
     .wm-head,
     .wm-foot {
-      padding: 16px 20px;
+      padding: calc(env(safe-area-inset-top, 20px) + 12px) 20px 16px;
       border-bottom: .5px solid var(--b2);
-      background: var(--bg2)
+      background: var(--bg2);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
     }
 
     .wm-foot {
@@ -2739,26 +2825,29 @@
         <div class="logger-chip">Last: ${last && last.w && last.r ? `${last.w}kg × ${last.r}` : 'none'}</div>
         <div class="logger-chip">Next: ${suggestion ? `${suggestion}kg` : 'log first'}</div>
       </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;padding:0 4px">
-        <div style="font-size:12px;color:var(--t2);width:20px;text-align:center">Set</div>
-        <div style="font-size:12px;color:var(--t2);flex:1;text-align:center">kg</div>
-        <div style="font-size:12px;color:var(--t2);flex:1;text-align:center">Reps</div>
-        <div style="font-size:12px;color:var(--t2);width:72px;text-align:center">RPE</div>
-        <div style="font-size:12px;color:var(--t2);width:44px;text-align:center">✓</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;padding:0 4px">
+        <div style="font-size:11px;text-transform:uppercase;color:var(--t3);width:24px;text-align:center">#</div>
+        <div style="font-size:11px;text-transform:uppercase;color:var(--t3);flex:1;text-align:center">Weight</div>
+        <div style="font-size:11px;text-transform:uppercase;color:var(--t3);flex:1;text-align:center">Reps</div>
+        <div style="font-size:11px;text-transform:uppercase;color:var(--t3);flex:1.5;text-align:center">RPE</div>
+        <div style="font-size:11px;text-transform:uppercase;color:var(--t3);width:44px;text-align:center">Done</div>
       </div>`;
 
       sets.forEach((s, sIdx) => {
         html += `
-        <div class="logger-row" ontouchstart="touchStart(event)" ontouchend="touchSetEnd(event,'${dayId}',${exIdx},${sIdx})">
-          <div class="logger-num">${sIdx + 1}</div>
+        <div class="logger-row ${s.drop ? 'is-drop' : ''}">
+          <div class="logger-num">${sIdx + 1}${s.drop ? '<span style="font-size:7px;display:block;margin-top:-2px">DRP</span>' : ''}</div>
           <input type="number" inputmode="decimal" class="logger-input" placeholder="-" value="${escapeHTML(s.w)}" onchange="updateSet('${escapeJsAttr(ex.name)}', ${sIdx}, 'w', this.value)">
           <input type="number" inputmode="numeric" class="logger-input" placeholder="-" value="${escapeHTML(s.r)}" onchange="updateSet('${escapeJsAttr(ex.name)}', ${sIdx}, 'r', this.value)">
-          <input type="range" min="1" max="10" class="rpe" value="${s.rpe || 7}" onchange="updateSet('${escapeJsAttr(ex.name)}', ${sIdx}, 'rpe', this.value)">
+          <div style="flex:1.5; display:flex; align-items:center; padding:0 4px">
+            <input type="range" min="1" max="10" class="rpe" value="${s.rpe || 7}" onchange="updateSet('${escapeJsAttr(ex.name)}', ${sIdx}, 'rpe', this.value)">
+          </div>
           <div class="logger-btn ${s.done ? 'done' : ''}" onclick="toggleSetDone('${dayId}', ${exIdx}, '${escapeJsAttr(ex.name)}', ${sIdx}, this)">✓</div>
         </div>
-        <div style="display:flex;gap:8px;margin:4px 0 8px 28px">
-          <button class="edit-btn" style="padding:7px" onclick="event.stopPropagation(); toggleDropSet('${escapeJsAttr(ex.name)}',${sIdx},'${dayId}',${exIdx})">${s.drop ? 'Drop set on' : 'Drop set'}</button>
-          <button class="edit-btn" style="padding:7px" onclick="event.stopPropagation(); duplicateSet('${dayId}',${exIdx},'${escapeJsAttr(ex.name)}',${sIdx})">Copy</button>
+        <div style="display:flex;gap:8px;margin:2px 0 8px 28px">
+          <button class="edit-btn" style="padding:6px 10px; ${s.drop ? 'background:var(--acc2);color:white' : ''}" onclick="event.stopPropagation(); toggleDropSet('${escapeJsAttr(ex.name)}',${sIdx},'${dayId}',${exIdx})">${s.drop ? 'Drop Set' : 'Add Drop'}</button>
+          <button class="edit-btn" style="padding:6px 10px" onclick="event.stopPropagation(); duplicateSet('${dayId}',${exIdx},'${escapeJsAttr(ex.name)}',${sIdx})">Copy</button>
+          <button class="edit-btn" style="padding:6px 10px; color:var(--red); border-color:rgba(255,107,107,0.2)" onclick="event.stopPropagation(); removeSet('${dayId}',${exIdx},'${escapeJsAttr(ex.name)}',${sIdx})">Delete</button>
         </div>`;
       });
 
@@ -2815,6 +2904,23 @@
       const set = workoutLogs[today]?.[exName]?.[sIdx];
       if (!set) return;
       set.drop = !set.drop;
+      saveLogs();
+      renderLogger(dayId, exIdx);
+    }
+
+    function removeSet(dayId, exIdx, exName, sIdx) {
+      const today = getTodayKey();
+      const sets = workoutLogs[today]?.[exName];
+      if (!sets || sets.length <= 1) {
+        if (sets && sets.length === 1) {
+           // If it's the last set, just clear it instead of deleting the array item
+           sets[0] = { w: '', r: '', rpe: '', done: false, drop: false };
+        } else {
+          return;
+        }
+      } else {
+        sets.splice(sIdx, 1);
+      }
       saveLogs();
       renderLogger(dayId, exIdx);
     }
@@ -4081,12 +4187,13 @@
       if (!toast) {
         toast = document.createElement('div');
         toast.id = 'appToast';
-        toast.style.cssText = 'position:fixed;top:calc(12px + env(safe-area-inset-top,20px));left:50%;transform:translateX(-50%) translateY(-100px);background:var(--card2);color:var(--t1);padding:12px 22px;border-radius:14px;font-size:13px;font-weight:600;z-index:9999;border:0.5px solid var(--b2);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:transform .35s cubic-bezier(.32,1,.28,1);white-space:nowrap';
+        toast.style.cssText = 'position:fixed;top:calc(16px + env(safe-area-inset-top,20px));left:50%;transform:translateX(-50%) translateY(-100px);background:var(--acc);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:700;z-index:9999;box-shadow:0 8px 24px rgba(123,111,255,0.3);transition:transform .4s cubic-bezier(.18,.89,.32,1.28);white-space:nowrap';
         document.body.appendChild(toast);
       }
       toast.textContent = msg;
       toast.style.transform = 'translateX(-50%) translateY(0)';
-      setTimeout(() => { toast.style.transform = 'translateX(-50%) translateY(-100px)'; }, 2200);
+      vibrate(30);
+      setTimeout(() => { toast.style.transform = 'translateX(-50%) translateY(-100px)'; }, 2500);
     }
 
     // ── DIET ──
