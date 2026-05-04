@@ -1,0 +1,36 @@
+# macOS
+.DS_Store
+
+# Logs and temp output
+*.log
+*.tmp
+*.temp
+
+# Dependencies / build output if the app later gains tooling
+node_modules/
+dist/
+build/
+.next/
+.vite/
+
+# Test and coverage artifacts
+coverage/
+playwright-report/
+test-results/
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Python helper cache
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Editor metadata
+.vscode/
+.idea/
+CHANGELOG.md
+GAP_ANALYSIS.md
+
